@@ -76,7 +76,7 @@ echo 'Test GSSTF Grid DODS without CF.'
 time curl -s -g 'http://52.20.142.186:8080/s3/dap/cloudydap/samples/GSSTFYC.3.Year.1988_2008.he5.dods?/HDFEOS/GRIDS/NCEP/Data%20Fields/SST' -o gsstf_d2.bin
 
 echo 'Test GSSTF Grid DAP4 without CF.'
-time curl -s -g  'http://52.20.142.186:8080/s3/dap/cloudydap/samples/GSSTFYC.3.Year.1988_2008.he5.dap?dap4.ce=/HDFEOS/GRIDS/NCEP/Data%20Fields/SST' -o gsstf_d4.bin
+time curl -s -g  'http://52.20.142.186:8080/s3/dap/cloudydap/samples/GSSTFYC.3.Year.1988_2008.he5.dap?dap4.ce=/HDFEOS/GRIDS/NCEP/"Data%20Fields"/SST' -o gsstf_d4.bin
 
 echo 'Test 3A GPM DODS without CF.'
 time curl -s http://52.20.142.186:8080/s3/dap/cloudydap/samples/3A-MO.GPM.GMI.GRID2014R1.20140601-S000000-E235959.06.V03A.h5.dods\?/Grid/rainWater -o 3agpm_d2.bin
