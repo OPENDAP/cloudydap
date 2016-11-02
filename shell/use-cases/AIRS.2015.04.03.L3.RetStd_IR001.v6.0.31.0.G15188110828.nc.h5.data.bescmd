@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request reqID="some_unique_value" >
+    <setContext name="dap_format">dap2</setContext>
+    <setContainer name="AIRS.2015.04.03.L3.RetStd_IR001.v6.0.31.0.G15188110828.nc" space="catalog">/s3/dap/cloudydap/airs/AIRS.2015.04.03.L3.RetStd_IR001.v6.0.31.0.G15188110828.nc.h5</setContainer>
+    <define name="d">
+	<container name="AIRS.2015.04.03.L3.RetStd_IR001.v6.0.31.0.G15188110828.nc" >
+           <constraint>
+             Temperature_A[0:1:0][0:1:0][0:1:0]
+           </constraint>
+	</container>
+    </define>
+    <get type="dods" definition="d" />
+</request>
+
