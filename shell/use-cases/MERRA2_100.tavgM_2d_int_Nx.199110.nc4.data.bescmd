@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request reqID="some_unique_value" >
+    <setContext name="dap_format">dap2</setContext>
+    <setContainer name="MERRA2_100.tavgM_2d_int_Nx.199110" space="catalog">/s3/dap/cloudydap/merra2/MERRA2_100.tavgM_2d_int_Nx.199110.nc4</setContainer>
+    <define name="d">
+	<container name="MERRA2_100.tavgM_2d_int_Nx.199110" >
+           <constraint>
+             PRECCU[0:1:0][180:1:180][288:1:288]
+           </constraint>
+	</container>
+    </define>
+    <get type="dods" definition="d" />
+</request>
+
