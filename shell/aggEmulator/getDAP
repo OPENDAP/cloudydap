@@ -152,21 +152,22 @@ then
     then
         echo "CE: Is Not Set"; 
     fi
-    CONTAINER_ELEMENT=`cat <<EOF 
-        <bes:container name="myContainer" />
-    EOF
-    `
+CONTAINER_ELEMENT=`cat <<EOF 
+    <bes:container name="myContainer" />
+EOF
+`
 else 
     if [ $verbose = 1 ]
     then
         echo "CE: $CE"; 
     fi
-    CONTAINER_ELEMENT=`cat <<EOF 
-        <bes:container name="myContainer">
-            <bes:constraint>$CE</bes:constraint>
-        </bes:container>
-    EOF
-    `
+
+CONTAINER_ELEMENT=`cat <<EOF 
+    <bes:container name="myContainer">
+        <bes:constraint>$CE</bes:constraint>
+    </bes:container>
+EOF
+`
 fi
 
 
