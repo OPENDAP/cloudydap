@@ -158,7 +158,7 @@ EOF
 `
 
 
-COMMAND_FILE=$(mktemp -t getDAP_$$)
+COMMAND_FILE=$(mktemp -t getDAP_$$$$$$)
 if [ $verbose = 1 ]
 then
     echo "COMMAND_FILE: " $COMMAND_FILE
