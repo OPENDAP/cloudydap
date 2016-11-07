@@ -29,7 +29,7 @@ for FILE in $COLLECTION_FILE_NAMES
 do
     echo "Accessing $FILE";
     S3_URL="$COLLECTION_URL/$FILE"
-    ./getDAP -v -c $BES_CONF -s $SPACE -d $DAP -i $S3_URL
+    ./getDAP -v -c $BES_CONF -s $SPACE -d $DAP -t "PS" -i $S3_URL
 done
 
 

@@ -15,7 +15,7 @@ show_usage () {
     echo ""
     echo "SYNOPSIS"
     echo ""
-    echo "    $0 [-v] [-c bes_conf_file] [-s bes_space_name] -d dap_request_type -i resource_id "; 
+    echo "    $0 [-v] [-c bes_conf_file] [-s bes_space_name] [-t dap2_constraint] -d dap_request_type -i resource_id "; 
     echo ""
     echo "DESCRIPTION"
     echo ""
@@ -40,6 +40,9 @@ show_usage () {
     echo "    -d  dds|das|dods|dmr|dap "
     echo "               The type of the DAP object to request. Default: dds"
     echo ""
+    echo "    -t  ce     The DAP2 constraint expression to apply to the request."
+    echo ""
+    echo ""
     echo "    -c  file   Specifies the BES configuration file"
     echo ""
     echo ""
@@ -52,7 +55,7 @@ OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
 verbose=0
 
-while getopts "h?vd:i:c:s:" opt; do
+while getopts "h?vd:i:c:s:t:" opt; do
     case "$opt" in
     h|\?)
         show_usage
@@ -67,6 +70,8 @@ while getopts "h?vd:i:c:s:" opt; do
     c)  BES_CONF=$OPTARG
         ;;
     s)  SPACE=$OPTARG
+        ;;
+    t)  CE=$OPTARG
         ;;
     esac
 done
@@ -140,6 +145,25 @@ then
 fi
 
 
+
+if [ -z ${CE+"true"} ]
+then 
+    echo "CE: Is Not Set"; 
+CONTAINER_ELEMENT=`cat <<EOF 
+        <bes:container name="myContainer" />
+EOF
+`
+else 
+    echo "CE: $CE"; 
+CONTAINER_ELEMENT=`cat <<EOF 
+        <bes:container name="myContainer">
+            <bes:constraint>$CE</bes:constraint>
+        </bes:container>
+EOF
+`
+fi
+
+
 cmdDoc=`cat <<EOF 
 <?xml version="1.0" encoding="UTF-8"?>
 <bes:request xmlns:bes="http://xml.opendap.org/ns/bes/1.0#" reqID="[http-bio-8080-exec-1:20:gateway_request]">
@@ -150,7 +174,7 @@ cmdDoc=`cat <<EOF
   <bes:setContext name="max_response_size">0</bes:setContext>
   <bes:setContainer name="myContainer" space="$SPACE">$RESOURCE_ID</bes:setContainer>
   <bes:define name="d1" space="default">
-    <bes:container name="myContainer" />
+    $CONTAINER_ELEMENT
   </bes:define>
   <bes:get type="$REQUESTED_DAP_OBJ" definition="d1" />
 </bes:request>
