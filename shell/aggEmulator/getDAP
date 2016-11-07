@@ -148,19 +148,25 @@ fi
 
 if [ -z ${CE+"true"} ]
 then 
-    echo "CE: Is Not Set"; 
-CONTAINER_ELEMENT=`cat <<EOF 
+    if [ $verbose = 1 ]
+    then
+        echo "CE: Is Not Set"; 
+    fi
+    CONTAINER_ELEMENT=`cat <<EOF 
         <bes:container name="myContainer" />
-EOF
-`
+    EOF
+    `
 else 
-    echo "CE: $CE"; 
-CONTAINER_ELEMENT=`cat <<EOF 
+    if [ $verbose = 1 ]
+    then
+        echo "CE: $CE"; 
+    fi
+    CONTAINER_ELEMENT=`cat <<EOF 
         <bes:container name="myContainer">
             <bes:constraint>$CE</bes:constraint>
         </bes:container>
-EOF
-`
+    EOF
+    `
 fi
 
 
