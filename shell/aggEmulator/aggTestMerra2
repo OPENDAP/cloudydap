@@ -2,7 +2,7 @@
 
 export DAP_REQUEST=dds
 export COLLECTION="merra2"
-export AGG_FILES="merra2_AggFiles"
+export FILES_LIST="merra2_AggFiles"
 export DAP2_CE="PRECCU[0:1:0][180:1:180][288:1:288]"
 
 
