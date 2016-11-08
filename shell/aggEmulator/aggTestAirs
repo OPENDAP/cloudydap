@@ -4,7 +4,7 @@ export COLLECTION="airs"
 export DAP2_CE="Temperature_A\[0:1:0\]\[0:1:0\]\[0:1:0\]"
 
 
-source ./aggTest
+source ./traverseCollection
 
 
 
