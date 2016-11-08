@@ -1,11 +1,15 @@
 #!/bin/sh
 
+verbose=1;
+
 export DAP_REQUEST=dds
 export COLLECTION="airs"
 export FILES_LIST="airs_AggFiles"
 export DAP2_CE="Temperature_A[0][0][0]"
 
-source ./aggRequest
+export STORE_RESULT="true"
+
+source ./aggTestProcessor
 
 
 

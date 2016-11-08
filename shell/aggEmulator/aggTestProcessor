@@ -1,0 +1,115 @@
+#!/bin/sh
+
+if [ -z ${verbose+"true"} ]
+then 
+    verbose=0
+fi
+if [ $verbose = 1 ] ; then echo "COLLECTION: $COLLECTION"; fi
+
+
+if [ -z ${COLLECTION+"true"} ]
+then 
+    COLLECTION="merra2"
+fi
+if [ $verbose = 1 ] ; then echo "COLLECTION: $COLLECTION"; fi
+mkdir -p $COLLECTION
+
+if [ -z ${DAP2_CE+"true"} ]
+then 
+    DAP2_CE="PS"
+fi
+if [ $verbose = 1 ] ; then echo "DAP2_CE: $DAP2_CE"; fi
+
+if [ -z ${DAP_REQUEST+"true"} ]
+then 
+    DAP_REQUEST="dds"
+fi
+if [ $verbose = 1 ] ; then echo "DAP_REQUEST: $DAP_REQUEST"; fi
+
+if [ -z ${FILES_LIST+"true"} ]
+then 
+    FILES_LIST="AggFiles"
+fi
+if [ $verbose = 1 ] ; then echo "FILES_LIST: $FILES_LIST"; fi
+
+
+BES_CONF=$prefix/etc/bes/bes.conf
+if [ $verbose = 1 ] ; then echo "BES_CONF: $BES_CONF"; fi
+
+SPACE=gateway
+if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi
+
+
+BUCKET_URL="http://cloudydap.s3.amazonaws.com"
+if [ $verbose = 1 ] ; then echo "BUCKET_URL: $BUCKET_URL"; fi
+
+COLLECTION_URL="$BUCKET_URL/$COLLECTION"
+if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
+
+
+COLLECTION_FILE_NAMES=`cat $FILES_LIST`
+if [ $verbose = 1 ] ; then echo "Located "`echo $COLLECTION_FILE_NAMES | wc -w `" files."; fi
+
+for FILE in $COLLECTION_FILE_NAMES
+do
+    echo "Accessing $FILE";
+    S3_RESOURCE_URL="$COLLECTION_URL/$FILE"
+    if [ $verbose = 1 ] ; then echo "S3_RESOURCE_URL: $S3_RESOURCE_URL"; fi
+
+    if [ -z ${STORE_RESULT+"true"} ]
+    then 
+        RESULT_FILE="/dev/null"
+    else 
+        RESULT_FILE=$COLLECTION/$FILE.$DAP_REQUEST
+    fi
+    if [ $verbose = 1 ] ; then echo "RESULT_FILE: $RESULT_FILE"; fi
+
+
+    # ./getDAP -c $BES_CONF -s $SPACE -d $DAP_REQUEST -t "$DAP2_CE" -i $S3_RESOURCE_URL > $COLLECTION/$FILE.$DAP_REQUEST
+    
+    if [ -z ${DAP2_CE+"true"} ]
+    then 
+        if [ $verbose = 1 ] ; then  echo "DAP2_CE: Is Not Set"; fi
+CONTAINER_ELEMENT=`cat <<EOF 
+    <bes:container name="myContainer" />
+EOF
+`
+    else 
+        if [ $verbose = 1 ] ; then echo "DAP2_CE: $DAP2_CE"; fi
+
+CONTAINER_ELEMENT=`cat <<EOF 
+    <bes:container name="myContainer">
+        <bes:constraint>$DAP2_CE</bes:constraint>
+    </bes:container>
+EOF
+`
+    fi
+
+
+cmdDoc=`cat <<EOF 
+<?xml version="1.0" encoding="UTF-8"?>
+<bes:request xmlns:bes="http://xml.opendap.org/ns/bes/1.0#" reqID="[http-bio-8080-exec-1:20:gateway_request]">
+  <bes:setContext name="bes_timeout">300</bes:setContext>
+  <bes:setContext name="xdap_accept">2.0</bes:setContext>
+  <bes:setContext name="dap_explicit_containers">no</bes:setContext>
+  <bes:setContext name="errors">xml</bes:setContext>
+  <bes:setContext name="max_response_size">0</bes:setContext>
+  <bes:setContainer name="myContainer" space="$SPACE">$S3_RESOURCE_URL</bes:setContainer>
+  <bes:define name="d1" space="default">
+    $CONTAINER_ELEMENT
+  </bes:define>
+  <bes:get type="$DAP_REQUEST" definition="d1" />
+</bes:request>
+EOF
+`
+
+
+    COMMAND_FILE=$(mktemp -t getDAP_XXXXXX)
+    if [ $verbose = 1 ] ; then echo "COMMAND_FILE: " $COMMAND_FILE;  fi
+    
+    echo $cmdDoc > $COMMAND_FILE
+    if [ $verbose = 1 ] ; then cat $COMMAND_FILE; fi
+    
+    besstandalone -c $BES_CONF -i $COMMAND_FILE -f $RESULT_FILE
+
+done
