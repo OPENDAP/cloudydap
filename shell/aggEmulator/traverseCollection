@@ -1,13 +1,22 @@
 #!/bin/sh
 
-BES_CONF=$prefix/etc/bes/bes.conf
-SPACE=gateway
-DAP=dds
+
+if [ -z ${COLLECTION+"true"} ]
+then 
+    COLLECTION="merra2"
+fi
+
+if [ -z ${DAP2_CE+"true"} ]
+then 
+    DAP2_CE="PS"
+fi
 
 BUCKET_URL="http://cloudydap.s3.amazonaws.com"
 
-COLLECTION="merra2"
-DAP2_CE="PS"
+
+BES_CONF=$prefix/etc/bes/bes.conf
+SPACE=gateway
+DAP=dds
 
 
 COLLECTION_URL="$BUCKET_URL/$COLLECTION"
@@ -16,6 +25,7 @@ COLLECTION_INDEX_URL="$COLLECTION_URL//index.xml"
 
 echo "COLLECTION_INDEX_URL: $COLLECTION_INDEX_URL"
 
+# Chew up lines like this to get file names:
 #  <s3c:file name="MERRA2_400.tavgM_2d_slv_Nx.201505.nc4" last-modified="2015-08-25T16:16:53.000Z" size="54177369" />
 
 COLLECTION_FILE_NAMES=`curl -s "$COLLECTION_INDEX_URL" | \

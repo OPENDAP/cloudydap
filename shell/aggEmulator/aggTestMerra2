@@ -1,0 +1,10 @@
+#!/bin/sh
+
+export COLLECTION="merra2"
+export DAP2_CE="PRECCU\[0:1:0\]\[180:1:180\]\[288:1:288\]"
+
+
+source ./aggTest
+
+
+
