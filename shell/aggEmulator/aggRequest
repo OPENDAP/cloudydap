@@ -4,16 +4,19 @@ if [ -z ${COLLECTION+"true"} ]
 then 
     COLLECTION="merra2"
 fi
+echo "COLLECTION: $COLLECTION"
 
 if [ -z ${DAP2_CE+"true"} ]
 then 
     DAP2_CE="PS"
 fi
+echo "DAP2_CE: $DAP2_CE"
 
 if [ -z ${DAP_REQUEST+"true"} ]
 then 
     DAP_REQUEST="dds"
 fi
+echo "DAP_REQUEST: $DAP_REQUEST"
 
 
 BUCKET_URL="http://cloudydap.s3.amazonaws.com"
@@ -23,7 +26,9 @@ SPACE=gateway
 
 COLLECTION_URL="$BUCKET_URL/$COLLECTION"
 
-COLLECTION_FILE_NAMES=`cat $COLLECTION_AggFiles`
+FILES_LIST=$COLLECTION"_AggFiles"
+
+COLLECTION_FILE_NAMES=`cat $FILES_LIST`
       
 echo "Located "`echo $COLLECTION_FILE_NAMES | wc -w `" files."
 
