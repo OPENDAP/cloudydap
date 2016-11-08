@@ -1,0 +1,39 @@
+
+################################################################################
+
+Aggregation Emulation
+
+In this directory find shell scripts that are designed to emulate simple 
+aggregation requests without utilizing the ncml_handler.
+
+
+README - This file
+
+aggTestAirs - Performs a simulation of a single DAP resquest that spans 366
+AIRS data files, requesting a single value from the "Temparature_A" array 
+variablefrom each file.
+
+aggTestMerra2 - Performs a simulation of a single DAP resquest that spans 439
+MERRA2 data files, requesting a single value from the "PRECCU" array variable
+from each file.
+
+
+aggTestProcessor - This code does the heavy lifting for the emulation utilizing
+besstandalone and not bescmdln which relies on network access to interact with 
+the BES. Since the user, and later, the OLFS make a single request that is
+transmitted to the BES using bescmdln in this test would only serve to amplify
+any network latency issues by making 100s of requests.
+
+airs_AggFiles - Contains a list of granule names that define the aggregation 
+accessed by the aggTestAirs script.
+ 
+merra2_AggFiles - Contains a list of granule names that define the aggregation 
+accessed by the aggTestMerra2 script.
+
+traverseCollection - Utilizes the embeded index.xml files in our S3 bucket to
+pull data from each file in a collection. A single constraint is utilized. This
+code is not currently used because the organization of our S3 bucket failed to 
+group datasets into logical collections of semantically related granules. Oh. Well.
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
