@@ -19,6 +19,12 @@ then
 fi
 echo "DAP_REQUEST: $DAP_REQUEST"
 
+if [ -z ${FILES_LIST+"true"} ]
+then 
+    FILES_LIST="AggFiles"
+fi
+echo "FILES_LIST: $FILES_LIST"
+
 
 BUCKET_URL="http://cloudydap.s3.amazonaws.com"
 
@@ -27,7 +33,6 @@ SPACE=gateway
 
 COLLECTION_URL="$BUCKET_URL/$COLLECTION"
 
-FILES_LIST=$COLLECTION"_AggFiles"
 
 COLLECTION_FILE_NAMES=`cat $FILES_LIST`
       
