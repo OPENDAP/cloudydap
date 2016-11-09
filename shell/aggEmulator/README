@@ -10,19 +10,20 @@ aggregation requests without utilizing the ncml_handler.
 README - This file
 
 aggTestAirs - Performs a simulation of a single DAP resquest that spans 366
-AIRS data files, requesting a single value from the "Temparature_A" array 
-variablefrom each file.
+AIRS data files, requesting from each file a single value from the 
+"Temparature_A" array variable.
 
 aggTestMerra2 - Performs a simulation of a single DAP resquest that spans 439
-MERRA2 data files, requesting a single value from the "PRECCU" array variable
-from each file.
+MERRA2 data files, requesting frm each file a single value from the "PRECCU" 
+array variable.
 
 
 aggTestProcessor - This code does the heavy lifting for the emulation utilizing
 besstandalone and not bescmdln which relies on network access to interact with 
-the BES. Since the user, and later, the OLFS make a single request that is
-transmitted to the BES using bescmdln in this test would only serve to amplify
-any network latency issues by making 100s of requests.
+the BES. When accessing and aggrgated dataset the user, and later, the OLFS make 
+a single request that is transmitted to the BES. Using bescmdln in this test 
+would only serve to amplify any network latency issues by making 100s of network
+requests.
 
 airs_AggFiles - Contains a list of granule names that define the aggregation 
 accessed by the aggTestAirs script.
