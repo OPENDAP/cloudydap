@@ -36,9 +36,9 @@ if [ $verbose = 1 ] ; then echo "FILES_LIST: $FILES_LIST"; fi
 BES_CONF=$prefix/etc/bes/bes.conf
 if [ $verbose = 1 ] ; then echo "BES_CONF: $BES_CONF"; fi
 
-if [ $verbose = 1 ] ; then echo "TARGET: $TARGET"; fi
+if [ $verbose = 1 ] ; then echo "DATA_SOURCE: $DATA_SOURCE"; fi
 
-if [ "$TARGET" = "S3_GATEWAY" ] ; then
+if [ "$DATA_SOURCE" = "S3_GATEWAY" ] ; then
     
     SPACE=gateway
     if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi
@@ -49,7 +49,7 @@ if [ "$TARGET" = "S3_GATEWAY" ] ; then
     COLLECTION_URL="$BUCKET_URL/$COLLECTION"
     if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
 
-elif [ "$TARGET" = "LOCAL" ] ; then
+elif [ "$DATA_SOURCE" = "LOCAL" ] ; then
 
     SPACE=catalog
     if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi

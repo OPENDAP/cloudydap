@@ -13,12 +13,14 @@ aggTestAirs - Performs a simulation of a single DAP resquest that spans 366
 AIRS data files, requesting from each file a single value from the 
 "Temparature_A" array variable. The command line must specifiy either 
 "LOCAL" or "S3_GATEWAY" to indicate where besstandalone should be retrieving 
-information.
+information. 
+Example: aggTestAirs S3_GATEWAY
 
 aggTestMerra2 - Performs a simulation of a single DAP resquest that spans 439
 MERRA2 data files, requesting frm each file a single value from the "PRECCU" 
 array variable. The command line must specifiy either "LOCAL" or "S3_GATEWAY"
 to indicate where besstandalone should be retrieving information.
+Example: aggTestAirs LOCAL
 
 
 aggTestProcessor - This code does the heavy lifting for the emulation utilizing

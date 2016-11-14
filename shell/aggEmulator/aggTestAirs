@@ -2,7 +2,7 @@
 
 verbose=1;
 
-export TARGET=$1
+export DATA_SOURCE=$1
 
 export DAP_REQUEST=dds
 export COLLECTION="airs"
