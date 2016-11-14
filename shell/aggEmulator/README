@@ -38,8 +38,8 @@ accessed by the aggTestMerra2 script.
 
 traverseCollection - Utilizes the embeded index.xml files in our S3 bucket to
 pull data from each file in a collection. A single constraint is utilized. This
-code is not currently used because the organization of our S3 bucket failed to 
-group datasets into logical collections of semantically related granules. Oh. Well.
+code is not currently used because the organization of our S3 bucket did not
+group datasets into logical collections of semantically related granules.
 
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
