@@ -32,9 +32,9 @@ parser.add_argument('-v', '--verbose', help='Verbose output',
                     action='store_true', default=False)
 parser.add_argument('-d', '--delete', action='store_true',
                     help='Delete S3 logs after download')
-
 arg = parser.parse_args()
 
+# Parse and fix up bucket and logs key prefix...
 s3loc = urlparse(arg.s3loc)
 s3bucket = s3loc.netloc
 s3prefix = s3loc.path
@@ -115,10 +115,7 @@ for l in new_logs:
 
             # Split 9th (used to be 10th) field into the HTTP method and URL
             # part...
-            try:
-                method, url = i[8].split(' ')[0:2]
-            except ValueError:
-                raise ValueError('---->', i[9])
+            method, url = i[8].split(' ')[0:2]
             i[8] = method
             i.insert(9, url)
 
