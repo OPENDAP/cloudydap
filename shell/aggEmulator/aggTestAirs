@@ -4,7 +4,7 @@ verbose=1;
 
 export DATA_SOURCE=$1
 
-export DAP_REQUEST=dds
+export DAP_REQUEST=dods
 export COLLECTION="airs"
 export FILES_LIST="airs_AggFiles"
 export DAP2_CE="Temperature_A[0][0][0]"

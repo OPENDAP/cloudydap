@@ -4,7 +4,7 @@ verbose=1;
 
 export DATA_SOURCE=$1
 
-export DAP_REQUEST=dds
+export DAP_REQUEST=dods
 export COLLECTION="merra2"
 export FILES_LIST="merra2_AggFiles"
 export DAP2_CE="PRECCU[0:1:0][180:1:180][288:1:288]"
