@@ -18,6 +18,7 @@ cd ~/hyrax
 # Run aggregation script.
 cd ~/cloudydap/shell/aggEmulator
 rm -rf merra2
+rm -f /tmp/getDAP_*
 date >> test_6.log
 ./aggTestMerra2 S3_GATEWAY
 date >> test_6.log
