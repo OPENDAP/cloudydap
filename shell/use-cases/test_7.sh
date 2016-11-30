@@ -3,7 +3,7 @@
 # All rights reserved.
 #
 # AIRS aggregation test.
-# https://github.com/OPENDAP/cloudydap/wiki/Trade-Study-Use-Case-6-----Simulate-NcML-JoinExisting-aggregation
+# https://github.com/OPENDAP/cloudydap/wiki/Trady-Study-Use-Case-7----Simulate-NcML-JoinNew-aggreegation
 
 # Download expected results.
 curl -s https://gamma.hdfgroup.org/ftp/pub/outgoing/opendap/data/HDF5/cloudydap/airs.tar.gz -o airs.tar.gz
