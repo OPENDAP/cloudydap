@@ -7,9 +7,11 @@
 #
 # https://github.com/OPENDAP/cloudydap/wiki/Trade-Study-Use-Case-6-----Simulate-NcML-JoinExisting-aggregation
 
-# Download expected results.
-curl -s https://gamma.hdfgroup.org/ftp/pub/outgoing/opendap/data/HDF5/cloudydap/merra2.tar.gz -o merra2.tar.gz
-tar zxvf merra2.tar.gz
+cd /home/centos/cloudydap/shell/use-cases
+
+# Download the expected results if you haven't downloaded them yet.
+# curl -s https://gamma.hdfgroup.org/ftp/pub/outgoing/opendap/data/HDF5/cloudydap/merra2.tar.gz -o merra2.tar.gz
+# tar zxvf merra2.tar.gz
 
 # Set path and environment variable.
 cd ~/hyrax
