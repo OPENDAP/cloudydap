@@ -24,7 +24,7 @@ time curl -s -g http://52.55.197.86:8080/s3/dap/cloudydap/samples/GSSTFYC.3.Year
 # time curl -s http://localhost:8081/opendap/s3/dap/cloudydap/samples/GSSTFYC.3.Year.1988_2008.he5.dds -o gsstf_local.dds
 
 # echo 'Test GSSTF DODS (local).'
-3 time curl -s http://localhost:8081/opendap/s3/dap/cloudydap/samples/GSSTFYC.3.Year.1988_2008.he5.dods\?lon,lat,NCEP_SST -o gsstf_local_d2_ll.bin
+# time curl -s http://localhost:8081/opendap/s3/dap/cloudydap/samples/GSSTFYC.3.Year.1988_2008.he5.dods\?lon,lat,NCEP_SST -o gsstf_local_d2_ll.bin
 
 
 # echo 'Test GSSTF DODS subsetting (local).'
