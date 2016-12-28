@@ -34,10 +34,10 @@ parser.add_argument(
     '--to', help='Destination directory for cost reports (will be created).',
     default=Path().cwd())
 dt = current_dt()
-parser.add_argument('-y', '--year',
+parser.add_argument('-y', '--year', type=int,
                     help='Billing report\'s year. Default: current year.',
                     default=dt.year)
-parser.add_argument('-m', '--month',
+parser.add_argument('-m', '--month', type=int,
                     help='Billing report\'s month. Default: current month.',
                     default=dt.month)
 parser.add_argument('--aws_key', default=os.environ.get('AWS_ACCESS_KEY_ID'),
@@ -65,9 +65,18 @@ if s3prefix[-1] != '/':
 s3prefix = PurePosixPath(s3prefix)
 log('S3 bucket = {}; S3 base key prefix = {}'.format(s3bucket, s3prefix))
 
-# Compute the dates for the first day of the current and next month...
-cur_first = dt.replace(day=1)
-next_first = (cur_first + datetime.timedelta(days=32)).replace(day=1)
+# Compute the dates for the first day of the billing's month and its next
+# month...
+bill_sp = datetime.datetime(arg.year, arg.month, 1)
+bill_ep = (bill_sp + datetime.timedelta(days=32)).replace(day=1)
+
+# Directory where billing report should be downloaded to. Make one if it does
+# not exist...
+log_dir = Path(arg.to)
+if not log_dir.exists():
+    log('Creating directory for report file {}'.format(log_dir))
+    log_dir.mkdir(mode=0o774, parents=True)
+log('Download S3 logs to directory: {}'.format(log_dir.resolve()))
 
 # Connect to AWS and the S3 bucket...
 log('Connecting to AWS')
@@ -81,9 +90,8 @@ s3 = boto3.resource(
 
 # Bucket key for billing report JSON locator file...
 report_name = s3prefix.stem
-manifest = s3prefix.joinpath(
-    cur_first.strftime('%Y%m%d') + '-' + next_first.strftime('%Y%m%d'),
-    '{}-Manifest.json'.format(report_name))
+bill_prd = bill_sp.strftime('%Y%m%d') + '-' + bill_ep.strftime('%Y%m%d')
+manifest = s3prefix.joinpath(bill_prd, '{}-Manifest.json'.format(report_name))
 
 # Get the key for the billing report from the JSON locator...
 log('Getting billing manifest {}'.format(manifest))
@@ -91,14 +99,12 @@ obj = s3.Object(s3bucket, str(manifest))
 info = json.loads(obj.get()['Body'].read().decode('utf-8'))
 
 # Sanity checks...
-if info['account'] != '688542879810':
-    raise ValueError('Unexpected account number')
-elif info['bucket'] != s3bucket:
+if info['bucket'] != s3bucket:
     raise ValueError('%s: Bucket name mismatch' % info['bucket'])
 elif info['reportName'] != report_name:
     raise ValueError('%s: Report name mismatch' % info['reportName'])
-bill_start_period = cur_first.strftime('%Y%m%dT000000.000Z')
-bill_end_period = next_first.strftime('%Y%m%dT000000.000Z')
+bill_start_period = bill_sp.strftime('%Y%m%dT000000.000Z')
+bill_end_period = bill_ep.strftime('%Y%m%dT000000.000Z')
 if (info['billingPeriod']['start'] != bill_start_period or
         info['billingPeriod']['end'] != bill_end_period):
     raise ValueError('Billing start and/or end period mismatch')
@@ -108,7 +114,9 @@ if not info['reportKeys']:
     print('No report to download', file=sys.stderr)
 else:
     for rk in info['reportKeys']:
-        dest = Path(arg.to).joinpath(PurePosixPath(rk).name)
+        dest = Path(arg.to).joinpath(
+            PurePosixPath(rk).name.replace(report_name,
+                                           report_name + '-' + bill_prd))
         log('Downloading report {} to {}'.format(rk, dest))
         s3.Object(s3bucket, rk).download_file(str(dest))
 
