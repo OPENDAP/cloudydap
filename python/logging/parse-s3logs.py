@@ -2,6 +2,7 @@
 """
 Download and parse S3 access logs from a specified S3 bucket.
 """
+import os
 import sys
 import argparse
 from pathlib import Path, PurePosixPath
@@ -9,6 +10,7 @@ from datetime import datetime
 from urllib.parse import urlparse
 import csv
 import boto3
+import botocore.config
 
 
 def log(*msg):
@@ -18,16 +20,23 @@ def log(*msg):
 
 parser = argparse.ArgumentParser(
     description='Download and parse S3 access logs',
-    epilog='Developed under the NASA/Raytheon EED-2 Task 28 contract.')
+    epilog='Developed under the NASA/Raytheon EED-2 Task 28 contract.',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-parser.add_argument('s3loc',
-                    help='S3 location of the logs (s3://[BUCKET]/[PATH]/)')
-parser.add_argument('to',
-                    help='Directory to download S3 logs to (may be created)')
 parser.add_argument('csvfile', help='Output CSV file for parsed information')
-parser.add_argument('aws_key', help='Amazon identification key', default=None)
-parser.add_argument('aws_secret', help='Amazon identification key secret',
-                    default=None)
+parser.add_argument('--s3loc',
+                    help='S3 location of the reports (s3://[BUCKET]/[PATH]/)',
+                    default='s3://cloudydap/logs')
+parser.add_argument(
+    '--to', help='Destination directory for S3 access logs (will be created).',
+    default=Path().cwd())
+parser.add_argument('--aws_key', default=os.environ.get('AWS_ACCESS_KEY_ID'),
+                    help='Amazon identification key. Default: from '
+                    '$AWS_ACCESS_KEY_ID env. variable.')
+parser.add_argument('--aws_secret',
+                    default=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+                    help='Amazon identification key secret. Default: from '
+                    '$AWS_SECRET_ACCESS_KEY env. variable.')
 parser.add_argument('-v', '--verbose', help='Verbose output',
                     action='store_true', default=False)
 parser.add_argument('-d', '--delete', action='store_true',
