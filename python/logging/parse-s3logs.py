@@ -66,7 +66,9 @@ log('Download S3 logs to directory: {}'.format(log_dir.resolve()))
 # Connect to AWS and the S3 bucket...
 log('Connecting to AWS')
 s3 = boto3.resource('s3', aws_access_key_id=arg.aws_key,
-                    aws_secret_access_key=arg.aws_secret)
+                    aws_secret_access_key=arg.aws_secret,
+                    config=botocore.config.Config(
+                        user_agent_extra=PurePosixPath(sys.argv[0]).name))
 bckt = s3.Bucket(s3bucket)
 
 # New S3 logs to parse...
