@@ -7,6 +7,13 @@ fi
 if [ $verbose = 1 ] ; then echo "COLLECTION: $COLLECTION"; fi
 
 
+if [ -z ${CLOUDYDAP_TAG+"true"} ]
+then 
+    CLOUDYDAP_TAG="RUN_STARTED_"`date +%s`
+fi
+if [ $verbose = 1 ] ; then echo "CLOUDYDAP_TAG: $CLOUDYDAP_TAG"; fi
+
+
 if [ -z ${COLLECTION+"true"} ]
 then 
     COLLECTION="merra2"
@@ -14,15 +21,15 @@ fi
 if [ $verbose = 1 ] ; then echo "COLLECTION: $COLLECTION"; fi
 mkdir -p $COLLECTION
 
-if [ -z ${DAP2_CE+"true"} ]
+if [ -z ${DAP4_CE+"true"} ]
 then 
-    DAP2_CE="PS"
+    DAP4_CE="PS"
 fi
-if [ $verbose = 1 ] ; then echo "DAP2_CE: $DAP2_CE"; fi
+if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
 if [ -z ${DAP_REQUEST+"true"} ]
 then 
-    DAP_REQUEST="dds"
+    DAP_REQUEST="dmr"
 fi
 if [ $verbose = 1 ] ; then echo "DAP_REQUEST: $DAP_REQUEST"; fi
 
@@ -71,6 +78,9 @@ for FILE in $COLLECTION_FILE_NAMES
 do
     echo "Accessing $FILE";
     S3_RESOURCE_URL="$COLLECTION_URL/$FILE"
+    if [ "$DATA_SOURCE" = "S3_GATEWAY" ] ; then
+        S3_RESOURCE_URL=$S3_RESOURCE_URL"?cloudydap=$CLOUDYDAP_TAG"
+    fi
     if [ $verbose = 1 ] ; then echo "S3_RESOURCE_URL: $S3_RESOURCE_URL"; fi
 
     if [ -z ${STORE_RESULT+"true"} ]
@@ -86,19 +96,19 @@ do
 
     # ./getDAP -c $BES_CONF -s $SPACE -d $DAP_REQUEST -t "$DAP2_CE" -i $S3_RESOURCE_URL > $COLLECTION/$FILE.$DAP_REQUEST
     
-    if [ -z ${DAP2_CE+"true"} ]
+    if [ -z ${DAP4_CE+"true"} ]
     then 
-        if [ $verbose = 1 ] ; then  echo "DAP2_CE: Is Not Set"; fi
+        if [ $verbose = 1 ] ; then  echo "DAP4_CE: Is Not Set"; fi
 CONTAINER_ELEMENT=`cat <<EOF 
     <bes:container name="myContainer" />
 EOF
 `
     else 
-        if [ $verbose = 1 ] ; then echo "DAP2_CE: $DAP2_CE"; fi
+        if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
 CONTAINER_ELEMENT=`cat <<EOF 
     <bes:container name="myContainer">
-        <bes:constraint>$DAP2_CE</bes:constraint>
+        <bes:dap4constraint>$DAP4_CE</bes:dap4constraint>
     </bes:container>
 EOF
 `
@@ -112,6 +122,7 @@ cmdDoc=`cat <<EOF
   <bes:setContext name="xdap_accept">2.0</bes:setContext>
   <bes:setContext name="dap_explicit_containers">no</bes:setContext>
   <bes:setContext name="errors">xml</bes:setContext>
+  <bes:setContext name="cloudydap">$CLOUDYDAP_TAG</bes:setContext>
   <bes:setContext name="max_response_size">0</bes:setContext>
   <bes:setContainer name="myContainer" space="$SPACE">$S3_RESOURCE_URL</bes:setContainer>
   <bes:define name="d1" space="default">

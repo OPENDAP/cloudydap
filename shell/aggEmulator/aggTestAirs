@@ -3,11 +3,12 @@
 verbose=1;
 
 export DATA_SOURCE=$1
+export CLOUDYDAP_TAG="RUN_STARTED_"`date +%s`
 
-export DAP_REQUEST=dods
+export DAP_REQUEST=dap
 export COLLECTION="airs"
 export FILES_LIST="airs_AggFiles"
-export DAP2_CE="Temperature_A[0][0][0]"
+export DAP4_CE="Temperature_A[0][0][0]"
 
 export STORE_RESULT="true"
 
