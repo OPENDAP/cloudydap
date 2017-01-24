@@ -69,7 +69,7 @@ elif [ "$DATA_SOURCE" = "DMRPP" ] ; then
     SPACE=catalog
     if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi
         
-    COLLECTION_URL="/$COLLECTION.dmrpp";
+    COLLECTION_URL="/$COLLECTION";
     if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
     
 else 
@@ -88,6 +88,9 @@ do
     S3_RESOURCE_URL="$COLLECTION_URL/$FILE"
     if [ "$DATA_SOURCE" = "S3_GATEWAY" ] ; then
         S3_RESOURCE_URL=$S3_RESOURCE_URL"?cloudydap=$CLOUDYDAP_TAG"
+    fi
+    if [ "$DATA_SOURCE" = "DMRPP" ] ; then
+        S3_RESOURCE_URL=$S3_RESOURCE_URL".dmrpp"
     fi
     if [ $verbose = 1 ] ; then echo "S3_RESOURCE_URL: $S3_RESOURCE_URL"; fi
 
