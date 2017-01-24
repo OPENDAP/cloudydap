@@ -3,7 +3,30 @@
 verbose=1;
 
 export DATA_SOURCE=$1
-export CLOUDYDAP_TAG="RUN_STARTED_"`date +%s`
+if [ -z ${DATA_SOURCE+"true"} ]
+then 
+    DATA_SOURCE="UNKNOWN"
+fi
+if [ $verbose = 1 ] ; then echo "DATA_SOURCE: $DATA_SOURCE"; fi
+
+
+
+export USE_CASE_ID=$2
+if [ -z ${USE_CASE_ID+"true"} ]
+then 
+    USE_CASE_ID="UNKNOWN"
+fi
+if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
+
+
+export ARCH_ID=$3
+if [ -z ${ARCH_ID+"true"} ]
+then 
+    ARCH_ID="UNKNOWN"
+fi
+if [ $verbose = 1 ] ; then echo "ARCH_ID: $ARCH_ID"; fi
+
+export CLOUDYDAP_TAG=$2"_"$3"_STARTED_"`date +%s`
 
 export DAP_REQUEST=dap
 export COLLECTION="airs"

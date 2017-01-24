@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 verbose=1;
 
 export DATA_SOURCE=$1
@@ -27,10 +26,7 @@ then
 fi
 if [ $verbose = 1 ] ; then echo "ARCH_ID: $ARCH_ID"; fi
 
-
-
 export CLOUDYDAP_TAG=$2"_"$3"_STARTED_"`date +%s`
-
 
 export DAP_REQUEST=dap
 export COLLECTION="merra2"
