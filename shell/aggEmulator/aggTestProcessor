@@ -4,8 +4,7 @@ if [ -z ${verbose+"true"} ]
 then 
     verbose=0
 fi
-if [ $verbose = 1 ] ; then echo "COLLECTION: $COLLECTION"; fi
-
+if [ $verbose = 1 ] ; then echo "verbose: $verbose"; fi
 
 if [ -z ${CLOUDYDAP_TAG+"true"} ]
 then 
