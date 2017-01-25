@@ -22,6 +22,6 @@ cd ~/cloudydap/shell/aggEmulator
 rm -rf merra2
 rm -f /tmp/getDAP_*
 date >> test_6.log
-./aggTestMerra2 S3_GATEWAY
+./aggTestMerra2 S3_GATEWAY UC6 A1CFT
 date >> test_6.log
 diff -r merra2 ../use-cases/merra2

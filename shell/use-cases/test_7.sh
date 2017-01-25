@@ -20,7 +20,7 @@ cd ~/cloudydap/shell/aggEmulator
 rm -rf airs
 rm -f /tmp/getDAP_*
 date >> test_7.log
-./aggTestAirs S3_GATEWAY
+./aggTestAirs S3_GATEWAY UC7 A1CFT
 date >> test_7.log
 diff -r airs ../use-cases/airs
 
