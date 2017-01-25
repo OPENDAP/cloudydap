@@ -4,7 +4,7 @@
 #
 # https://github.com/OPENDAP/cloudydap/wiki/Trade-Study-Use-Case-2---DAP4-with-CF
 #
-CLOUDYDAP_TAG="UC2_A2CFT_STARTED_"`date +%s`
+CLOUDYDAP_TAG="UC2_A2CFT_STARTED_"`date +%s`".h5"
 echo 'Test AIRS DMR.'
 time curl -s http://a2cft.opendap.org:8080/opendap/cloudydap/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dmr -o airs.dmr
 
