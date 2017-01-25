@@ -26,7 +26,7 @@ then
 fi
 if [ $verbose = 1 ] ; then echo "ARCH_ID: $ARCH_ID"; fi
 
-export CLOUDYDAP_TAG=$2"_"$3"_STARTED_"`date +%s`".h5"
+export CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"
 
 export DAP_REQUEST=dap
 export COLLECTION="merra2"
