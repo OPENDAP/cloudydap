@@ -68,7 +68,7 @@ elif [ "$DATA_SOURCE" = "DMRPP" ] ; then
     SPACE=catalog
     if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi
         
-    COLLECTION_URL="/cloudydap/$COLLECTION";
+    COLLECTION_URL="/$COLLECTION";
     if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
     
 else 

@@ -2,16 +2,7 @@
 
 verbose=1;
 
-export DATA_SOURCE=$1
-if [ -z ${DATA_SOURCE+"true"} ]
-then 
-    DATA_SOURCE="UNKNOWN"
-fi
-if [ $verbose = 1 ] ; then echo "DATA_SOURCE: $DATA_SOURCE"; fi
-
-
-
-export USE_CASE_ID=$2
+export USE_CASE_ID=$1
 if [ -z ${USE_CASE_ID+"true"} ]
 then 
     USE_CASE_ID="UNKNOWN"
@@ -19,17 +10,17 @@ fi
 if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
 
 
-export ARCH_ID=$3
-if [ -z ${ARCH_ID+"true"} ]
-then 
-    ARCH_ID="UNKNOWN"
-fi
+
+export DATA_SOURCE="DMRPP"
+if [ $verbose = 1 ] ; then echo "DATA_SOURCE: $DATA_SOURCE"; fi
+
+export ARCH_ID="A3CFT"
 if [ $verbose = 1 ] ; then echo "ARCH_ID: $ARCH_ID"; fi
 
 export CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"
 
 export DAP_REQUEST=dap
-export COLLECTION="airs"
+export COLLECTION="arch3/airs"
 export FILES_LIST="airs_AggFiles"
 export DAP4_CE="Temperature_A[0][0][0]"
 
