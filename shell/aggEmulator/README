@@ -9,23 +9,50 @@ aggregation requests without utilizing the ncml_handler.
 
 README - This file
 
-aggTestAirs - Performs a simulation of a single DAP resquest that spans 366
+arch2_aggTestAirs - Performs a simulation of a single DAP request that spans 366
 AIRS data files, requesting from each file a single value from the 
-"Temparature_A" array variable. The command line must specifiy either 
-"LOCAL" or "S3_GATEWAY" to indicate where besstandalone should be retrieving 
-information. 
-Example: aggTestAirs S3_GATEWAY
+"Temperature_A" array variable. This version utilizes the architecture 2 code 
+where range gets are applied to parts of hdf5 files resident as objects in S3.
 
-aggTestMerra2 - Performs a simulation of a single DAP resquest that spans 439
-MERRA2 data files, requesting frm each file a single value from the "PRECCU" 
-array variable. The command line must specifiy either "LOCAL" or "S3_GATEWAY"
-to indicate where besstandalone should be retrieving information.
-Example: aggTestAirs LOCAL
+The command line should include a USE_CASE ID for tracking through the S3 access.
+
+Example: arch2_aggTestAirs UC6
+
+
+arch3_aggTestAirs - Performs a simulation of a single DAP request that spans 366
+AIRS data files, requesting from each file a single value from the 
+"Temperature_A" array variable. This version utilizes the architecture 3 code 
+where individual byteStream objects are stored in S3 and reserved as needed while
+evaluating a DMRPP.
+
+The command line should include a use case ID for tracking through the S3 access.
+
+Example: arch3_aggTestAirs UC6
+
+
+arch2_aggTestMerra2 - Performs a simulation of a single DAP request that spans 439
+MERRA2 data files, requesting from each file a single value from the "PRECCU" 
+array variable. This version utilizes the architecture 2 code 
+where range gets are applied to parts of hdf5 files resident as objects in S3.
+
+The command line should include a use case ID for tracking through the S3 access.
+
+Example: arch2_aggTestMerra2 UC17
+
+
+arch3_aggTestMerra2 - Performs a simulation of a single DAP request that spans 439
+MERRA2 data files, requesting from each file a single value from the "PRECCU" 
+array variable. This version utilizes the architecture 3 code where individual
+byteStream objects are stored in S3 and reserved as needed while evaluating a DMRPP.
+
+The command line should include a use case ID for tracking through the S3 access.
+
+Example: arch3_aggTestMerra2 UC17
 
 
 aggTestProcessor - This code does the heavy lifting for the emulation utilizing
 besstandalone and not bescmdln which relies on network access to interact with 
-the BES. When accessing and aggrgated dataset the user, and later, the OLFS make 
+the BES. When accessing and aggregated dataset the user, and later, the OLFS make 
 a single request that is transmitted to the BES. Using bescmdln in this test 
 would only serve to amplify any network latency issues by making 100s of network
 requests.
@@ -36,7 +63,7 @@ accessed by the aggTestAirs script.
 merra2_AggFiles - Contains a list of granule names that define the aggregation 
 accessed by the aggTestMerra2 script.
 
-traverseCollection - Utilizes the embeded index.xml files in our S3 bucket to
+traverseCollection - Utilizes the embedded index.xml files in our S3 bucket to
 pull data from each file in a collection. A single constraint is utilized. This
 code is not currently used because the organization of our S3 bucket did not
 group datasets into logical collections of semantically related granules.
