@@ -49,18 +49,10 @@ if [ "$DATA_SOURCE" = "S3_GATEWAY" ] ; then
     SPACE=gateway
     if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi
     
-    BUCKET_URL="http://cloudydap.s3.amazonaws.com"
+    BUCKET_URL="https://s3.amazonaws.com/cloudydap"
     if [ $verbose = 1 ] ; then echo "BUCKET_URL: $BUCKET_URL"; fi
     
     COLLECTION_URL="$BUCKET_URL/$COLLECTION"
-    if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
-
-elif [ "$DATA_SOURCE" = "LOCAL" ] ; then
-
-    SPACE=catalog
-    if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi
-        
-    COLLECTION_URL="/$COLLECTION";
     if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
 
 elif [ "$DATA_SOURCE" = "DMRPP" ] ; then
@@ -72,7 +64,7 @@ elif [ "$DATA_SOURCE" = "DMRPP" ] ; then
     if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
     
 else 
-    echo "ERROR: Production target must be either 'S3_GATEWAY' or 'LOCAL' or 'DMRPP'";
+    echo "ERROR: Production target must be either 'S3_GATEWAY' or 'DMRPP'";
     exit 2;
 fi
 
@@ -84,13 +76,16 @@ if [ $verbose = 1 ] ; then echo "Located "`echo $COLLECTION_FILE_NAMES | wc -w `
 for FILE in $COLLECTION_FILE_NAMES
 do
     echo "Accessing $FILE";
+    
     S3_RESOURCE_URL="$COLLECTION_URL/$FILE"
     if [ "$DATA_SOURCE" = "S3_GATEWAY" ] ; then
         S3_RESOURCE_URL=$S3_RESOURCE_URL"?cloudydap=$CLOUDYDAP_TAG"
     fi
+    
     if [ "$DATA_SOURCE" = "DMRPP" ] ; then
         S3_RESOURCE_URL=$S3_RESOURCE_URL".dmrpp"
     fi
+    
     if [ $verbose = 1 ] ; then echo "S3_RESOURCE_URL: $S3_RESOURCE_URL"; fi
 
     if [ -z ${STORE_RESULT+"true"} ]
