@@ -1,27 +1,21 @@
 #!/bin/bash
-# Copyright (C) 2016 The HDF Group
+# Copyright (C) 2016-2017 The HDF Group
 # All rights reserved.
 #
 # AIRS aggregation test.
 # https://github.com/OPENDAP/cloudydap/wiki/Trady-Study-Use-Case-7----Simulate-NcML-JoinNew-aggreegation
-
-cd /home/centos/cloudydap/shell/use-cases
-
-# Download expected results if you haven't downloaded them yet.
-# curl -s https://gamma.hdfgroup.org/ftp/pub/outgoing/opendap/data/HDF5/cloudydap/airs.tar.gz -o airs.tar.gz
-# tar zxvf airs.tar.gz
 
 # Set path and environment variable.
 cd ~/hyrax
 . spath.sh
 
 # Run aggregation script.
-cd ~/cloudydap/shell/aggEmulator
-rm -rf airs
+cd ~/hyrax/cloudydap/shell/aggEmulator
+rm -rf arch2/airs
 rm -f /tmp/getDAP_*
-date >> test_7.log
-./aggTestAirs DMRPP UC7 A2CFT
-date >> test_7.log
-diff -r airs ../use-cases/airs
+date >> test_7_arch2.log
+./arch2_aggTestAirs UC7
+date >> test_7_arch2.log
+diff -r arch2/airs ~/arch2/airs
 
 
