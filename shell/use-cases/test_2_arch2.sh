@@ -30,9 +30,9 @@ time curl -s -g http://cloudydap.opendap.org:8080/opendap/arch2/airs/AIRS.2015.0
 # > <Dataset xmlns="http://xml.opendap.org/ns/DAP/4.0#" xml:base="http://cloudydap.opendap.org:8080/s3/dap/arch2/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp" dapVersion="4.0" dmrVersion="1.0" name="AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp">
 # There are too many differences in Arch #1 and Arch #2 XML.
 diff airs_local.dmr airs.dmr > airs.dmr.diff
-cat airs_d4_ll.bin | getdap4 -D -M - |  > airs_d4_ll.asc
+cat airs_d4_ll.bin | getdap4 -D -M - | tail -5 > airs_d4_ll.asc
 # cat airs_local_d4_ll.bin | getdap4 -D -M - > airs_local_d4_ll.asc
-diff airs_local_d4_ll.asc airs_d4_ll.asc
-cat airs_d4_ss.bin | getdap4 -D -M - > airs_d4_ss.asc
+diff airs_arch2_d4_ll.asc airs_d4_ll.asc
+cat airs_d4_ss.bin | getdap4 -D -M - | tail -3 > airs_d4_ss.asc
 # cat airs_local_d4_ss.bin | getdap4 -D -M - > airs_local_d4_ss.asc
 diff airs_local_d4_ss.asc airs_d4_ss.asc
