@@ -13,7 +13,7 @@ cd ~/hyrax
 cd ~/hyrax/cloudydap/shell/aggEmulator
 rm -rf arch2/merra2
 rm -f /tmp/getDAP_*
-date >> test_6_arch2.log
+date >> ~/test_6_arch2.log
 ./arch2_aggTestMerra2 UC6
-date >> test_6_arch2.log
+date >> ~/test_6_arch2.log
 diff -r arch2/merra2 ~/arch2/merra2

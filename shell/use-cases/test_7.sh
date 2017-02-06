@@ -13,9 +13,9 @@ cd ~/hyrax
 cd ~/hyrax/cloudydap/shell/aggEmulator
 rm -rf arch1/airs
 rm -f /tmp/getDAP_*
-date >> test_7_arch1.log
+date >> ~/test_7_arch1.log
 ./arch1_aggTestAirs UC7
-date >> test_7_arch1.log
+date >> ~/test_7_arch1.log
 diff -r arch1/airs ~/arch1/airs
 
 
