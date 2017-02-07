@@ -1,0 +1,16 @@
+#!/bin/sh
+
+verbose=1;
+
+export USE_CASE_ID=$1
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
+then 
+    USE_CASE_ID="UNKNOWN_USE_CASE"
+fi
+if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
+
+# Load Decimate Subset Constraint 
+source ./airs_decimate_subset_dap4_ce.sh
+if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
+
+./arch1_airs_agg_test $USE_CASE_ID "$DAP4_CE"
