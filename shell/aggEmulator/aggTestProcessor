@@ -6,6 +6,13 @@ then
 fi
 if [ $verbose = 1 ] ; then echo "verbose: $verbose"; fi
 
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
+then 
+    export USE_CASE_ID="UNKNOWN_USE_CASE"
+fi
+if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
+
+
 if [ -z ${CLOUDYDAP_TAG+"true"} ]
 then 
     CLOUDYDAP_TAG="RUN_STARTED_"`date +%s`
@@ -93,7 +100,7 @@ do
         RESULT_FILE="/dev/null"
         LOG_FILE=$RESULT_FILE
     else 
-        RESULT_FILE=$COLLECTION/$FILE.$DAP_REQUEST
+        RESULT_FILE=$COLLECTION/$FILE"_"$USE_CASE_ID.$DAP_REQUEST
         LOG_FILE=$RESULT_FILE.log
     fi
     if [ $verbose = 1 ] ; then echo "RESULT_FILE: $RESULT_FILE   LOG_FILE: $LOG_FILE"; fi

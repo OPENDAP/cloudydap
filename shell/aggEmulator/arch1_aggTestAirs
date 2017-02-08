@@ -5,7 +5,7 @@ verbose=1;
 export USE_CASE_ID=$1
 if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
 then 
-    USE_CASE_ID="UNKNOWN_USE_CASE"
+    export USE_CASE_ID="UNKNOWN_USE_CASE"
 fi
 if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
 
