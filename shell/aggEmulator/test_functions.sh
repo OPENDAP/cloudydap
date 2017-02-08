@@ -1,7 +1,19 @@
 #!/bin/sh
 
 
-function all_airs_tests() {
+function all_agg_tests() {
+    
+    use_case_id=$1;
+    
+    tests=`ls arch?_*`
+    for myTest in $tests
+    do
+        ./$myTest $use_case_id
+    done
+
+}
+
+function all_airs_agg_tests() {
     
     use_case_id=$1;
     
@@ -13,7 +25,7 @@ function all_airs_tests() {
 
 }
 
-function all_merra2_tests() {
+function all_merra2_agg_tests() {
     
     use_case_id=$1;
     
@@ -25,7 +37,7 @@ function all_merra2_tests() {
 
 }
 
-function all_arch1_tests() {
+function all_arch1_agg_tests() {
     
     use_case_id=$1;
     
@@ -37,7 +49,7 @@ function all_arch1_tests() {
 
 }
 
-function all_arch2_tests() {
+function all_arch2_agg_tests() {
     
     use_case_id=$1;
     
@@ -49,7 +61,7 @@ function all_arch2_tests() {
 
 }
 
-function all_arch3_tests() {
+function all_arch3_agg_tests() {
     
     use_case_id=$1;
     
@@ -62,7 +74,7 @@ function all_arch3_tests() {
 }
 
 
-function all_single_value_tests() {
+function all_single_value_agg_tests() {
     
     use_case_id=$1;
     
@@ -74,7 +86,7 @@ function all_single_value_tests() {
 
 }
 
-function all_decimate_subset_tests() {
+function all_decimate_subset_agg_tests() {
     
     use_case_id=$1;
     
@@ -87,7 +99,7 @@ function all_decimate_subset_tests() {
 }
 
 
-function all_area_subset_tests() {
+function all_area_subset_agg_tests() {
     
     use_case_id=$1;
     
