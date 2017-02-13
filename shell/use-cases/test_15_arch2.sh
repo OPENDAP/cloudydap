@@ -17,7 +17,10 @@ cd ~/hyrax/cloudydap/shell/aggEmulator
 rm -rf UC$uc"_A"$a"CFT"
 rm -f /tmp/getDAP_*
 date >> ~/test_$uc"_arch"$a.log
-./arch$a"_airs_agg_test_random_subset" UC$uc
+for i in {1..50}
+do
+    ./arch$a"_airs_agg_test_random_subset" UC$uc
+done 
 date >> ~/test_$uc"_arch"$a.log
 diff -r UC$uc"_A"$a"CFT" ~/arch$a/uc$uc
 
