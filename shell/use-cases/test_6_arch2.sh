@@ -11,9 +11,10 @@ cd ~/hyrax
 
 # Run aggregation script.
 cd ~/hyrax/cloudydap/shell/aggEmulator
-rm -rf arch2/merra2
+rm -rf UC6_A2CFT
 rm -f /tmp/getDAP_*
 date >> ~/test_6_arch2.log
-./arch2_aggTestMerra2 UC6
+# ./arch2_aggTestMerra2 UC6
+./arch2_merra2_agg_test_single_value UC6
 date >> ~/test_6_arch2.log
-diff -r arch2/merra2 ~/arch2/merra2
+diff -r UC6_A2CFT ~/arch2/merra2

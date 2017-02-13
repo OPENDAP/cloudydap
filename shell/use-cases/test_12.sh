@@ -5,18 +5,20 @@
 # AIRS aggregation test.
 # https://github.com/OPENDAP/cloudydap/wiki/Trady-Study-Use-Case-7----Simulate-NcML-JoinNew-aggreegation
 
+a=1;
+uc=12;
+
 # Set path and environment variable.
 cd ~/hyrax
 . spath.sh
 
 # Run aggregation script.
 cd ~/hyrax/cloudydap/shell/aggEmulator
-rm -rf UC7_A2CFT
+rm -rf UC$uc"_A"$a"CFT"
 rm -f /tmp/getDAP_*
-date >> ~/test_7_arch2.log
-#./arch2_aggTestAirs UC7
-./arch2_airs_agg_test_single_value UC7
-date >> ~/test_7_arch2.log
-diff -r UC7_A2CFT ~/arch2/airs
+date >> ~/test_$uc"_arch"$a.log
+./arch$a"_merra2_agg_test_area_subset" UC$uc
+date >> ~/test_$uc"_arch"$a.log
+diff -r UC$uc"_A"$a"CFT" ~/arch$a/uc$uc
 
 

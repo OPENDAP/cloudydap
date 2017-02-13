@@ -11,11 +11,12 @@ cd ~/hyrax
 
 # Run aggregation script.
 cd ~/hyrax/cloudydap/shell/aggEmulator
-rm -rf airs
+rm -rf UC7_A1CFT
 rm -f /tmp/getDAP_*
 date >> ~/test_7_arch1.log
-./arch1_aggTestAirs UC7
+#./arch1_aggTestAirs UC7
+./arch1_airs_agg_test_single_value UC7
 date >> ~/test_7_arch1.log
-diff -r airs ~/arch1/airs
+diff -r UC7_A1CFT ~/arch1/airs
 
 

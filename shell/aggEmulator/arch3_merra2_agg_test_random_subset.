@@ -1,0 +1,17 @@
+#!/bin/sh
+
+verbose=1;
+
+export USE_CASE_ID=$1
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
+then 
+    myid=`echo $0 | sed -e "s|./||g"`
+    USE_CASE_ID="$myid"
+fi
+if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
+
+# Load Area Subset Constraint 
+source ./merra2_random_subset_dap4_ce.sh
+if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
+
+./arch3_merra2_agg_test $USE_CASE_ID "$DAP4_CE"

@@ -25,7 +25,6 @@ then
     COLLECTION="merra2"
 fi
 if [ $verbose = 1 ] ; then echo "COLLECTION: $COLLECTION"; fi
-mkdir -p $COLLECTION
 
 if [ -z ${DAP4_CE+"true"} ]
 then 
@@ -100,7 +99,8 @@ do
         RESULT_FILE="/dev/null"
         LOG_FILE=$RESULT_FILE
     else 
-        RESULT_FILE=$COLLECTION/$FILE"_"$USE_CASE_ID.$DAP_REQUEST
+        mkdir -p $USE_CASE_ID"_"$ARCH_ID
+        RESULT_FILE=$USE_CASE_ID"_"$ARCH_ID/$FILE.$DAP_REQUEST
         LOG_FILE=$RESULT_FILE.log
     fi
     if [ $verbose = 1 ] ; then echo "RESULT_FILE: $RESULT_FILE   LOG_FILE: $LOG_FILE"; fi

@@ -10,7 +10,6 @@ then
 fi
 if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
 
-
 export DAP4_CE=$2
 if [[ -z "${DAP4_CE// }" ]] || [ ! -n $DAP4_CE ] 
 then 
