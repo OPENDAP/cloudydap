@@ -5,6 +5,7 @@
 # AIRS aggregation test.
 # https://github.com/OPENDAP/cloudydap/wiki/Trady-Study-Use-Case-7----Simulate-NcML-JoinNew-aggreegation
 
+
 a=3;
 uc=15;
 
@@ -17,7 +18,7 @@ cd ~/hyrax/cloudydap/shell/aggEmulator
 rm -rf UC$uc"_A"$a"CFT"
 rm -f /tmp/getDAP_*
 date >> ~/test_$uc"_arch"$a.log
-for i in {1..50}
+for i in {1..10}
 do
     ./arch$a"_airs_agg_test_random_subset" UC$uc
 done

@@ -26,4 +26,4 @@
 #    </h4:chunks>
 #
 #
-export DAP4_CE="PRECCU[0:1:0][160:1:200][245:1:290]" # 4 CHUNKS
+export DAP4_CE="PRECCU[0:1:0][160:1:200][245:1:295]" # 4 CHUNKS

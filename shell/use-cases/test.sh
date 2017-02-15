@@ -4,6 +4,18 @@
 #
 # This shell script runs all use case test scripts.
 #
+# Update your auth key location.
+AUTH_KEY="/Users/ndp/.ssh/RayrayAWS.pem";
+USER=centos
+SYSTEM=cloudydap.opendap.org
+TEST_DIR="/home/centos/hyrax/cloudydap/shell/use-cases";
+
+function remote_test(){
+    test_name=$1;
+    ssh -i $AUTH_KEY $USER"@"$SYSTEM "$TEST_DIR/$test_name";
+}
+   
+    
 echo 'Test Arch #1 UC2.'
 ./test_2.sh
 echo 'Test Arch #2 UC2.'
@@ -11,17 +23,16 @@ echo 'Test Arch #2 UC2.'
 echo 'Test Arch #3 UC2.'
 ./test_2_arch3.sh
 
-# Change your key.
-echo 'Test Arch #1 UC6.'
-ssh -i /Users/hyoklee/.ssh/RayrayAWS.pem centos@cloudydap.opendap.org '/home/centos/hyrax/cloudydap/shell/use-cases/test_6.sh'
-echo 'Test Arch #2 UC6.'
-ssh -i /Users/hyoklee/.ssh/RayrayAWS.pem centos@cloudydap.opendap.org '/home/centos/hyrax/cloudydap/shell/use-cases/test_6_arch2.sh'
-echo 'Test Arch #3 UC6.'
-ssh -i /Users/hyoklee/.ssh/RayrayAWS.pem centos@cloudydap.opendap.org '/home/centos/hyrax/cloudydap/shell/use-cases/test_6_arch3.sh'
+for i in 6 7 10 11 12 13 14 15
+do
+    echo 'Test Arch #1 UC'$i
+    remote_test "test_$i.sh"
+    echo 'Test Arch #2 UC'$i
+    remote_test "test_$i_arch2.sh"
+    echo 'Test Arch #3 UC'$i
+    remote_test "test_$i_arch3.sh"
+done
+    
 
-echo 'Test Arch #1 UC7.'
-ssh -i /Users/hyoklee/.ssh/RayrayAWS.pem centos@cloudydap.opendap.org '/home/centos/hyrax/cloudydap/shell/use-cases/test_7.sh'
-echo 'Test Arch #2 UC7.'
-ssh -i /Users/hyoklee/.ssh/RayrayAWS.pem centos@cloudydap.opendap.org '/home/centos/hyrax/cloudydap/shell/use-cases/test_7_arch2.sh'
-echo 'Test Arch #3 UC7.'
-ssh -i /Users/hyoklee/.ssh/RayrayAWS.pem centos@cloudydap.opendap.org '/home/centos/hyrax/cloudydap/shell/use-cases/test_7_arch3.sh'
+
+
