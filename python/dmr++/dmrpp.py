@@ -11,7 +11,17 @@ from lxml import etree
 from lxml.builder import ElementMaker
 
 
-def collect_info(fname):
+# Declare XML namespaces in use...
+ns = {'dap': 'http://xml.opendap.org/ns/DAP/4.0#',
+      'h4': 'http://www.hdfgroup.org/HDF4/XML/schema/HDF4map/1.0.1',
+      'xsi': 'http://www.w3.org/2001/XMLSchema-instance'}
+
+# Declare some XML tag constants...
+DAP4_GROUP = '{{{}}}Group'.format(ns['dap'])
+DAP4_DATASET = '{{{}}}Dataset'.format(ns['dap'])
+
+
+def collect_storage_info(fname):
     """Extract dataset storage information from HDF5 file.
 
     Args:
@@ -72,7 +82,7 @@ def collect_info(fname):
     return storage
 
 
-def locate_dset(dname, doc, dapns):
+def dset_in_dmr(dname, doc, dapns):
     """Find HDF5 dataset's DMR node.
 
     HDF5 dataset path is translated into an XPath expression which is run
@@ -138,12 +148,7 @@ def dmrpp(xml, h5fname):
         raise ValueError('DMR XML is not version 4.0')
 
     # Collect all HDF5 dataset storage information...
-    stinfo = collect_info(h5fname)
-
-    # Declare XML namespaces in use...
-    ns = {'dap': 'http://xml.opendap.org/ns/DAP/4.0#',
-          'h4': 'http://www.hdfgroup.org/HDF4/XML/schema/HDF4map/1.0.1',
-          'xsi': 'http://www.w3.org/2001/XMLSchema-instance'}
+    stinfo = collect_storage_info(h5fname)
 
     if stinfo:
         # Create shortcuts for the XML elements needed...
@@ -157,7 +162,7 @@ def dmrpp(xml, h5fname):
         for dset_name, dset_info in stinfo.items():
             # Translate dataset's name into an XPath to locate it in the
             # original DMR...
-            dset_node = locate_dset(dset_name, dmr, ns['dap'])
+            dset_node = dset_in_dmr(dset_name, dmr, ns['dap'])
 
             # Insert dataset storage information into its DMR XML...
             if dset_info.get('chunk_size'):
@@ -208,3 +213,88 @@ def dmrpp(xml, h5fname):
     etree.cleanup_namespaces(dmr, top_nsmap=ns)
     return etree.tostring(dmr, pretty_print=True, xml_declaration=True,
                           encoding='UTF-8').decode('utf-8')
+
+
+def dset_h5path(dset_node):
+    """Regenerate HDF5 dataset's path from its DMR++ XML element.
+
+    Args:
+        dset_node: HDF5 dataset's DMR++ XML node.
+
+    Returns:
+        Path for the HDF5 dataset as a string.
+    """
+    h5path = [dset_node.attrib['name']]
+    for a in dset_node.iterancestors():
+        if a.tag == DAP4_GROUP:
+            h5path.append(a.attrib['name'])
+        elif a.tag == DAP4_DATASET:
+            h5path.append('/')
+        else:
+            raise ValueError('Unexpected XML element: {}'.format(a.tag))
+    h5path.reverse()
+    return str(PurePosixPath(*h5path))
+
+
+def collect_bytestream_info(xml):
+    """Collect byte stream information for each HDF5 dataset in DMR++ XML.
+
+    Args:
+        xml: DMR++ XML as bytes.
+
+    Returns:
+        A dictionary.
+    """
+    dmrpp = etree.fromstring(xml)
+
+    # A dict to hold byte stream information...
+    bst = dict()
+    bst['h5file'] = dmrpp.getroottree().getroot().attrib['name']
+    bst['datasets'] = dict()
+
+    # XPath for finding any HDF5 dataset in DMR++...
+    xpath = ('(//dap:Char | //dap:Byte | //dap:Int8 | //dap:UInt8 | '
+             '//dap:Int16 | //dap:UInt16 | //dap:Int32 | //dap:UInt32 | '
+             '//dap:Int64 | //dap:UInt64 | //dap:Float32 | //dap:Float64 | '
+             '//dap:String)')
+
+    # Find all HDF5 datasets in DMR++ XML...
+    dsets = dmrpp.xpath(xpath, namespaces=ns)
+    for d in dsets:
+        dspath = dset_h5path(d)
+        dbs = dict()
+
+        # Top XML element for byte stream XML elements...
+        node = d.xpath('./h4:chunks', namespaces=ns)
+        if len(node) == 0:
+            node = d
+            dbs['chunked'] = False
+        else:
+            node = node[0]
+            dbs['chunked'] = True
+            dbs['chunk_size'] = node.xpath(
+                './h4:chunkDimensionSizes', namespaces=ns)[0].text
+            dbs['filters'] = node.attrib.get('compressionType', None)
+
+        # Find all byte stream XML elements...
+        streams = node.xpath('./h4:byteStream', namespaces=ns)
+        if len(streams) == 0:
+            continue
+
+        # Extract information for each byte stream...
+        dbs['byteStreams'] = dict()
+        for s in streams:
+            dbs['byteStreams'][s.attrib['uuid']] = {
+                'md5': s.attrib['md5'],
+                'size': s.attrib['nBytes'],
+                'offset': s.attrib['offset']
+            }
+            if dbs['chunked']:
+                dbs['byteStreams'][s.attrib['uuid']].update(
+                    {'array_position': s.attrib['chunkPositionInArray']}
+                )
+
+        # Assemble information for one dataset...
+        bst['datasets'][dspath] = dbs
+
+    return bst

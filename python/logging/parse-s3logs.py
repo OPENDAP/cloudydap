@@ -18,6 +18,36 @@ def log(*msg):
         print(*msg)
 
 
+def process_log(logf):
+    """Process one S3 access log file.
+
+    Return a list of lists where each element represents one row of the log
+    file.
+
+    logf: Path object representing an S3 log file.
+    """
+    log_entries = list()
+    with logf.open(mode='r') as f:
+        r = csv.reader(f, delimiter=' ', quotechar='"')
+        for i in r:
+            # 3nd and 4th field contain datetime in a weird format. Rearrange
+            # to ISO 8601 string...
+            i[2] = datetime.strptime(
+                i[2] + ' ' + i[3], '[%d/%b/%Y:%H:%M:%S %z]'
+            ).isoformat()
+            del i[3]
+
+            # Split 9th (used to be 10th) field into the HTTP method and URL
+            # part...
+            method, url = i[8].split(' ')[0:2]
+            i[8] = method
+            i.insert(9, url)
+
+            log_entries.append(i)
+
+    return log_entries
+
+
 parser = argparse.ArgumentParser(
     description='Download and parse S3 access logs',
     epilog='Developed under the NASA/Raytheon EED-2 Task 28 contract.',
@@ -63,78 +93,72 @@ if not log_dir.exists():
     log_dir.mkdir(mode=0o774, parents=True)
 log('Download S3 logs to directory: {}'.format(log_dir.resolve()))
 
+# The CSV files to store parsed S3 log data...
+csvfile = Path(arg.csvfile)
+if not csvfile.exists():
+    columns = ['Bucket_Owner', 'Bucket', 'Time', 'Remote_IP',
+               'Requester', 'Request_ID', 'Operation', 'Key',
+               'HTTP_method', 'Request_URI', 'HTTP_status',
+               'Error_Code', 'Bytes_Sent', 'Object_Size',
+               'Total_Time_ms', 'Turn_Around_Time_ms',
+               'Referrer', 'User_Agent', 'Version_Id']
+    with csvfile.open('w', newline='') as f:
+        csv.writer(f).writerow(columns)
+log('Store parsed log information in this CSV file: {}'
+    .format(csvfile.resolve()))
+
 # Connect to AWS and the S3 bucket...
 log('Connecting to AWS')
-s3 = boto3.resource('s3', aws_access_key_id=arg.aws_key,
-                    aws_secret_access_key=arg.aws_secret,
-                    config=botocore.config.Config(
-                        user_agent_extra=PurePosixPath(sys.argv[0]).name))
+s3 = boto3.resource(
+    's3', aws_access_key_id=arg.aws_key, aws_secret_access_key=arg.aws_secret,
+    config=botocore.config.Config(
+        user_agent_extra=PurePosixPath(sys.argv[0]).name
+    )
+)
 bckt = s3.Bucket(s3bucket)
 
 # New S3 logs to parse...
-new_logs = list()
+new_logs = 0
+failed_logs = list()
 
 # Loop over all S3 logs...
 for s3logf in bckt.objects.filter(Prefix=s3prefix):
-    # Local name of the S3 log file...
-    local_logf = log_dir.joinpath(PurePosixPath(s3logf.key).name)
+    try:
+        # Local name of the S3 log file...
+        local_logf = log_dir.joinpath(PurePosixPath(s3logf.key).name)
 
-    if local_logf.exists() and local_logf.stat().st_size == s3logf.size:
-        log('{} exists. Skipping.'.format(local_logf))
-        continue
+        if local_logf.exists() and local_logf.stat().st_size == s3logf.size:
+            log('{} exists. Skipping download.'.format(local_logf))
+        else:
+            # Download the S3 log file...
+            log('Downloading {} to {}'.format(s3logf.key, local_logf))
+            bckt.download_file(s3logf.key, str(local_logf))
+            new_logs += 1
 
-    # Download the S3 log file...
-    log('Downloading {} to {}'.format(s3logf.key, local_logf))
-    bckt.download_file(s3logf.key, str(local_logf))
+            log_entries = process_log(local_logf)
 
-    if arg.delete:
-        log('Deleting {} from the bucket'.format(s3logf.key))
-        bckt.Object(s3logf.key).delete()
+            if log_entries:
+                # Write the parsed log data to output file...
+                with csvfile.open('a', newline='') as f:
+                    w = csv.writer(f)
+                    w.writerows(log_entries)
+                    f.flush()
 
-    new_logs.append(local_logf)
+        if arg.delete:
+            try:
+                log('Deleting S3 object {}'.format(s3logf.key))
+                bckt.Object(s3logf.key).delete()
+            except Exception as e:
+                log('Failed to delete S3 object: {}'.format(str(e)))
+                failed_logs.append((s3logf.key, str(e)))
 
-log('Finished downloading {} new S3 log files'.format(len(new_logs)))
-if len(new_logs) == 0:
-    log('Done!')
-    sys.exit()
+    except Exception as e:
+        failed_logs.append((s3logf.key, str(e)))
 
-# The CSV files to store parse S3 log data...
-csvfile = Path(arg.csvfile)
-if not csvfile.exists():
-    columns = ['Bucket_Owner', 'Bucket', 'Time', 'Remote_IP', 'Requester',
-               'Request_ID', 'Operation', 'Key', 'HTTP_method', 'Request_URI',
-               'HTTP_status', 'Error_Code', 'Bytes_Sent', 'Object_Size',
-               'Total_Time_ms', 'Turn_Around_Time_ms', 'Referrer',
-               'User_Agent', 'Version_Id']
-    with csvfile.open('w', newline='') as f:
-        csv.writer(f).writerow(columns)
-log('Store parsed log information in the CSV file: {}'
-    .format(csvfile.resolve()))
 
-# Parse the access info in the new log files...
-for l in new_logs:
-    log_entries = []
-    with l.open(mode='r') as f:
-        r = csv.reader(f, delimiter=' ', quotechar='"')
-        for i in r:
-            # 3nd and 4th field contain datetime in a weird format. Rearrange
-            # to ISO 8601 string...
-            i[2] = datetime.strptime(
-                i[2] + ' ' + i[3], '[%d/%b/%Y:%H:%M:%S %z]'
-            ).isoformat()
-            del i[3]
-
-            # Split 9th (used to be 10th) field into the HTTP method and URL
-            # part...
-            method, url = i[8].split(' ')[0:2]
-            i[8] = method
-            i.insert(9, url)
-
-            log_entries.append(i)
-
-    if log_entries:
-        with csvfile.open('a', newline='') as f:
-            w = csv.writer(f)
-            w.writerows(log_entries)
-
+log('Finished downloading {} new S3 log files'.format(new_logs))
+if len(failed_logs):
+    log('Processing of {} S3 logs failed'.format(len(failed_logs)))
+    for l in failed_logs:
+        print('Key {} Error: {}'.format(l[0], l[1]))
 log('Done!')
