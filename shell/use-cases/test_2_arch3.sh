@@ -5,6 +5,7 @@
 # https://github.com/OPENDAP/cloudydap/wiki/Trade-Study-Use-Case-2---DAP4-with-CF
 #
 CLOUDYDAP_TAG="UC2_A3CFT_STARTED_"`date +%s`".h5"
+
 echo 'Test AIRS DMR.'
 time curl -s http://cloudydap.opendap.org:8080/opendap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dmr -o airs.dmr
 
@@ -28,10 +29,10 @@ time curl -s -g http://cloudydap.opendap.org:8080/opendap/arch3/airs/AIRS.2015.0
 # < <Dataset xmlns="http://xml.opendap.org/ns/DAP/4.0#" xml:base="http://localhost:8081/opendap/s3/dap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp" dapVersion="4.0" dmrVersion="1.0" name="AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp">
 # ---
 # > <Dataset xmlns="http://xml.opendap.org/ns/DAP/4.0#" xml:base="http://cloudydap.opendap.org:8080/s3/dap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp" dapVersion="4.0" dmrVersion="1.0" name="AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp">
-diff airs_arch3.dmr airs.dmr
-cat airs_d4_ll.bin | getdap4 -D -M - | tail -5 > airs_d4_ll.asc
+diff airs_local.dmr airs.dmr
+cat airs_d4_ll.bin | getdap4 -D -M - > airs_d4_ll.asc
 # cat airs_local_d4_ll.bin | getdap4 -D -M - > airs_local_d4_ll.asc
-diff airs_arch2_d4_ll.asc airs_d4_ll.asc
-cat airs_d4_ss.bin | getdap4 -D -M - | tail -3 > airs_d4_ss.asc
+diff airs_local_d4_ll.asc airs_d4_ll.asc
+cat airs_d4_ss.bin | getdap4 -D -M - > airs_d4_ss.asc
 # cat airs_local_d4_ss.bin | getdap4 -D -M - > airs_local_d4_ss.asc
 diff airs_local_d4_ss.asc airs_d4_ss.asc
