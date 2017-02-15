@@ -26,11 +26,11 @@ echo 'Test Arch #3 UC2.'
 for i in 6 7 10 11 12 13 14 15
 do
     echo 'Test Arch #1 UC'$i
-    remote_test "test_$i.sh"
+    remote_test "test_"$i".sh"
     echo 'Test Arch #2 UC'$i
-    remote_test "test_$i_arch2.sh"
+    remote_test "test_"$i"_arch2.sh"
     echo 'Test Arch #3 UC'$i
-    remote_test "test_$i_arch3.sh"
+    remote_test "test_"$i"_arch3.sh"
 done
     
 
