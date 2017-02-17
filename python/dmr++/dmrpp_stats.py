@@ -51,8 +51,8 @@ if len(dmrpp_files):
     log('Found {} DMR++ files.'.format(len(dmrpp_files)))
     csvfile = Path(arg.csvfile)
     if not csvfile.exists():
-        columns = ['File', 'Dataset', 'Chunk_Flag', 'UUID', 'MD5', 'Offset',
-                   'Size']
+        columns = ['File', 'Dataset', 'Chunk_Flag', 'UUID', 'Checksum',
+                   'Offset', 'Size']
         with csvfile.open('w', newline='') as f:
             csv.writer(f).writerow(columns)
     log('Store dataset storage information in this CSV file: {}'
