@@ -1,0 +1,13 @@
+
+
+.DS_Store
+*/.DS_Store
+
+gsfc/opendap_mungaddr.txt   
+larc/ASDC_access_clean.log 
+lpdaac/logs_for_opendap.txt
+nsidc/access_log_opendap_hashed_n5dpl01
+nsidc/access_log_opendap_hashed_n5eil01
+
+./*.log
+./*.json
