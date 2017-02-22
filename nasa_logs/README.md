@@ -1,6 +1,7 @@
 
-In this directory find the NASA access logs to software to massage them into 
-JSON form and upload them into a locally running instance of Kibana/Elastic Search.
+In this directory find the NASA access logs given to the cloudydap project 
+along with software to massage them into JSON form and upload them into a 
+locally running instance of Kibana/Elastic Search.
 
 What To Do:
 
