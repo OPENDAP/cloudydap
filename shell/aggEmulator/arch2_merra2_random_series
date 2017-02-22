@@ -32,6 +32,8 @@ do
     if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
 
     output_file=$results_dir/$test_file$file_suffix;
+    if [ $verbose = 1 ] ; then echo "output_file: $output_file"; fi
+    
     time curl -s "$request_url" -o $output_file > $output_file.log 2>&1 
 done 
 
