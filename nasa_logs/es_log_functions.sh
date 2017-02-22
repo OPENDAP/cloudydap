@@ -249,11 +249,26 @@ function convert_logs_to_json() {
 
 }    
 
-function unpack() {   
-    gunzip gsfc/opendap_mungaddr.txt.gz
-    gunzip larc/ASDC_access_clean.log.gz
-    gunzip lpdaac/logs_for_opendap.txt.gz 
-    cd nsidc; tar -xvf access_logs.tgz  
+function unpack() {  
+    
+    echo "Unpacking GSFC Logs."
+    gzcat gsfc/opendap_mungaddr.txt.gz > gsfc/opendap_mungaddr.txt &
+    
+    echo "Unpacking ASDC Logs."
+    gzcat larc/ASDC_access_clean.log.gz > larc/ASDC_access_clean.log &
+    
+    echo "Unpacking LPDAAC Logs."
+    gzcat lpdaac/logs_for_opendap.txt.gz > lpdaac/logs_for_opendap.txt &
+    
+    echo "Unpacking NSIDC Logs."
+    cd nsidc; 
+    tar -xvf access_logs.tgz &
+    cd ..
+
+    echo "Waiting for completion..."
+    wait $(jobs -p);
+    echo "Unpacking Is Finished."
+
 }    
 
 

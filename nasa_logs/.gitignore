@@ -9,5 +9,7 @@ lpdaac/logs_for_opendap.txt
 nsidc/access_log_opendap_hashed_n5dpl01
 nsidc/access_log_opendap_hashed_n5eil01
 
+scratch
+
 ./*.log
-./*.json
+*.json
