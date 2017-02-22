@@ -12,7 +12,7 @@ cd ~/hyrax
 . spath.sh
 
 # Run aggregation script.
-cd ~/hyrax/cloudydap/shell/aggEmulator
+cd ~/cloudydap/shell/aggEmulator
 rm -rf UC6_A3CFT
 rm -f /tmp/getDAP_*
 date >> ~/test_6_arch3.log

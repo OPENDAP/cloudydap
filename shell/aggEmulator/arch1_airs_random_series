@@ -28,7 +28,7 @@ do
     source ./airs_random_subset_dap4_ce.sh
     if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
-    request_url="$collection_url/$test_file$file_suffix?$DAP4_CE&$cloudydap=$CLOUDYDAP_TAG"
+    request_url="$collection_url/$test_file$file_suffix?$DAP4_CE&cloudydap=$CLOUDYDAP_TAG"
     if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
 
     output_file=$results_dir/$test_file$file_suffix;

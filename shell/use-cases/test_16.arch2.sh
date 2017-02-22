@@ -12,7 +12,7 @@ uc=16;
 cd ~/hyrax
 . spath.sh
 
-cd ~/hyrax/cloudydap/shell/aggEmulator
+cd ~/cloudydap/shell/aggEmulator
 pwd
 rm -rf UC$uc"_A"$a"CFT"
 date >> ~/test_$uc"_arch"$a.log

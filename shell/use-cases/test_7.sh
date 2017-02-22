@@ -10,7 +10,7 @@ cd ~/hyrax
 . spath.sh
 
 # Run aggregation script.
-cd ~/hyrax/cloudydap/shell/aggEmulator
+cd ~/cloudydap/shell/aggEmulator
 rm -rf UC7_A1CFT
 rm -f /tmp/getDAP_*
 date >> ~/test_7_arch1.log
