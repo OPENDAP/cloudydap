@@ -1,0 +1,41 @@
+#!/bin/sh
+
+verbose=1;
+
+export USE_CASE_ID=$1
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
+then 
+    myid=`echo $0 | sed -e "s|./||g"`
+    USE_CASE_ID="$myid"
+fi
+if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
+
+export ARCH_ID="A1CFT"
+export FILES_LIST="merra2_AggFiles"
+export results_dir=$USE_CASE_ID"_"$ARCH_ID
+export file_suffix=".dmrpp.dap"
+export collection_url="http://cloudydap.opendap.org:8080/s3/catalog/cloudydap/merra2"
+
+mkdir -p $results_dir
+
+CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_"`date +%s`".h5"
+
+for test_file in `cat $FILES_LIST`
+do
+    if [ $verbose = 1 ] ; then echo "test_file: $test_file"; fi
+
+    # Load Randomly Positioned Area Subset Constraint 
+    source ./merra2_random_subset_dap4_ce.sh
+    if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
+
+    request_url="$collection_url/$test_file$file_suffix?$DAP4_CE&$cloudydap=$CLOUDYDAP_TAG"
+    if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
+
+    output_file=$results_dir/$test_file$file_suffix;
+    time curl -s "$request_url" -o $output_file > $output_file.log 2>&1 
+done 
+
+
+
+
+

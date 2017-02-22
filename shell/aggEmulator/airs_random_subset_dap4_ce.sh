@@ -47,7 +47,7 @@ let subset_lon_start=$max_subset_lon_start*$RANDOM/$max_rand;
 let subset_lon_stop=$subset_lon_start+$subset_lon_size-1;
 echo "subset_lon_start: $subset_lon_start  subset_lon_stop:  $subset_lon_stop";
 
-export DAP4_CE="Temperature_A[0:8:23][$subset_lat_start:1:$subset_lat_stop][$subset_lon_start:1:$subset_lon_stop]"
+export DAP4_CE="Temperature_A[0:10:23][$subset_lat_start:1:$subset_lat_stop][$subset_lon_start:1:$subset_lon_stop]"
 
 
 
