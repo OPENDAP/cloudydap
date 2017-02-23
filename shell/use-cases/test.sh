@@ -23,7 +23,7 @@ echo 'Test Arch #2 UC2.'
 echo 'Test Arch #3 UC2.'
 ./test_2_arch3.sh
 
-for i in 6 7 10 11 12 13 14 15
+for i in 6 7 10 11 12 13 14 15 16 17
 do
     echo 'Test Arch #1 UC'$i
     remote_test "test_"$i".sh"
