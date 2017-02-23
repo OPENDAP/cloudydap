@@ -16,21 +16,24 @@ function remote_test(){
 }
    
     
-echo 'Test Arch #1 UC2.'
+echo 'Testing UC2 Arch #1'
 ./test_2.sh
-echo 'Test Arch #2 UC2.'
+echo 'Testing UC2 Arch #2'
 ./test_2_arch2.sh
-echo 'Test Arch #3 UC2.'
+echo 'Testing UC2 Arch #3.'
 ./test_2_arch3.sh
 
 for i in 6 7 10 11 12 13 14 15 16 17
 do
-    echo 'Test Arch #1 UC'$i
+    echo 'Testing UC'$i' Arch #1'
     remote_test "test_"$i".sh"
-    echo 'Test Arch #2 UC'$i
+    
+    echo 'Testing UC'$i' Arch #2'
     remote_test "test_"$i"_arch2.sh"
-    echo 'Test Arch #3 UC'$i
+    
+    echo 'Testing UC'$i' Arch #3'
     remote_test "test_"$i"_arch3.sh"
+
 done
     
 
