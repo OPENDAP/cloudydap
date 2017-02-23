@@ -30,7 +30,7 @@ do
     DAP4_CE=`echo "$DAP4_CE" | sed -e "s/\\[/\\\\\\[/g" -e "s/\\]/\\\\\\]/g"`
     if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
-    request_url="$collection_url/$test_file$file_suffix?$DAP4_CE&cloudydap=$CLOUDYDAP_TAG"
+    request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP_TAG"
     if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
 
     output_file=$results_dir/$test_file$file_suffix;
