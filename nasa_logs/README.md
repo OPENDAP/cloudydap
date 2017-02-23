@@ -1,7 +1,12 @@
 
-In this directory find the NASA access logs given to the cloudydap project 
-along with software to massage them into JSON form and upload them into a 
-locally running instance of Kibana/Elastic Search.
+In this directory find processing scripts for various NASA access logs 
+given to the cloudydap project. The scripts will massage the logs into 
+JSON form and upload them into a locally running instance of 
+Kibana/Elastic Search. In the process resource_id reoresenting granule
+files in the host server are extracted from the request paths submnitted 
+byt the client. This allows use to examine traffic on a resource as a
+conglomerate of the various alternative services and encodings layered 
+upon it.
 
 What To Do:
 
