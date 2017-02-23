@@ -34,7 +34,7 @@ do
     output_file=$results_dir/$test_file$file_suffix;
     if [ $verbose = 1 ] ; then echo "output_file: $output_file"; fi
     
-    time curl -s -o $output_file "$request_url" > $output_file.log 2>&1 
+    curl -v  -o $output_file "$request_url" > $output_file.log 2>&1 
 done 
 
 
