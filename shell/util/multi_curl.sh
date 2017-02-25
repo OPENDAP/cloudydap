@@ -42,14 +42,14 @@ do
     
     
     url="http://$multi_server/$arch/$dataset"
-#    (time -p get_it "$url" "$multi_output") &>multi.time
+    (time -p get_it "$url" "$multi_output") &>multi.time
 
 
     url="http://$sequential_server/$arch/$dataset"   
     (time -p get_it "$url" "$sequential_output") &>seq.time
 
     mtime=`head -1 multi.time | awk '{print $2;}' - `
-    stime=`head -1 seq.time | awk '{print $2;}' - `
+    stime=`head -1 seq.time   | awk '{print $2;}' - `
     ratio=`echo "3 k $mtime $stime / 100 * p" | dc`
 #    echo "mtime: $mtime stime: $stime ratio: $ratio%" 
 
