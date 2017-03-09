@@ -5,8 +5,8 @@
 # MERRA2 randomly positioned area subset test.
 
 
-a=2;
-uc=17;
+a=1;
+uc=21;
 
 # Set path and environment variable.
 cd ~/hyrax
@@ -15,7 +15,7 @@ cd ~/hyrax
 cd ~/cloudydap/shell/aggEmulator
 rm -rf UC$uc"_A"$a"CFT"
 date >> ~/test_$uc"_arch"$a.log
-./arch$a"_airs_random_series" UC$uc 
+./arch$a"_airs_allofit_series" UC$uc 
 date >> ~/test_$uc"_arch"$a.log
 
 

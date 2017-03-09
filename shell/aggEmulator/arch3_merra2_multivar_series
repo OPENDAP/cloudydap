@@ -10,11 +10,11 @@ then
 fi
 if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
 
-export ARCH_ID="A2CFT"
+export ARCH_ID="A3CFT"
 export FILES_LIST="merra2_AggFiles"
 export results_dir=$USE_CASE_ID"_"$ARCH_ID
 export file_suffix=".dmrpp.dap"
-export collection_url="http://cloudydap.opendap.org:8080/opendap/arch2/merra2"
+export collection_url="http://cloudydap.opendap.org:8080/opendap/arch3/merra2"
 
 mkdir -p $results_dir
 
@@ -22,11 +22,10 @@ CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_"`date +%s`".h5"
 
 for test_file in `cat $FILES_LIST`
 do
-    if [ $verbose = 1 ] ; then echo "----------------------------------------------------------"; fi
     if [ $verbose = 1 ] ; then echo "test_file: $test_file"; fi
 
     # Load Randomly Positioned Area Subset Constraint 
-    source ./merra2_random_subset_dap4_ce.sh
+    source ./merra2_multivar_decimate_subset_dap4_ce.sh
     DAP4_CE=`echo "$DAP4_CE" | sed -e "s/\\[/\\\\\\[/g" -e "s/\\]/\\\\\\]/g"`
     if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
@@ -37,6 +36,7 @@ do
     if [ $verbose = 1 ] ; then echo "output_file: $output_file"; fi
     
     time curl -v -o $output_file "$request_url" > $output_file.log 2>&1 
+
 done 
 
 

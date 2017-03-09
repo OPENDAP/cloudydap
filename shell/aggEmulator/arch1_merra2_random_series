@@ -21,6 +21,7 @@ CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_"`date +%s`".h5"
 
 for test_file in `cat $FILES_LIST`
 do
+    if [ $verbose = 1 ] ; then echo "----------------------------------------------------------"; fi
     if [ $verbose = 1 ] ; then echo "test_file: $test_file"; fi
 
     # Load Randomly Positioned Area Subset Constraint 
