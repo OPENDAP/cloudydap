@@ -25,4 +25,5 @@
 #      <h4:byteStream chunkPositionInArray="[0,273,432]" uuid="2b53072c-b2b8-405d-9f7d-012dcbde2b92" md5="8ebab410ca092c494d94b938d9e4f47c" nBytes="6001" offset="0" href="https://s3.amazonaws.com/cloudydap/bytestream/8ebab410ca092c494d94b938d9e4f47c" />
 #    </h4:chunks>
 #
-export DAP4_CE="PRECCU[0:1:0][0:60:360][0:8:575];Var_PRECCU[0:1:0][0:60:360][0:8:575];UFLXQL[0:1:0][0:60:360][0:8:575];Var_UFLXQI[0:1:0][0:60:360][0:8:575];VFLXQL[0:1:0][0:60:360][0:8:575];Var_VFLXQL[0:1:0][0:60:360][0:8:575];time[0:1:0];lat[0:60:360];lon[0:8:575]"
+export DAP4_CE="PRECCU[0:1:0][0:60:360][0:8:575];Var_PRECCU[0:1:0][0:60:360][0:8:575];UFLXQL[0:1:0][0:60:360][0:8:575];Var_UFLXQI[0:1:0][0:60:360][0:8:575];VFLXQL[0:1:0][0:60:360][0:8:575];Var_VFLXQL[0:1:0][0:60:360][0:8:575];DHDT_DYN[0:1:0][0:60:360][0:8:575];FRZCL[0:1:0][0:60:360][0:8:575];LWGNET[0:1:0][0:60:360][0:8:575];DKDT_PHYPHY[0:1:0][0:60:360][0:8:575];DQIDT_ANA[0:1:0][0:60:360][0:8:575];SWNETSRF[0:1:0][0:60:360][0:8:575];DMDT_PHY[0:1:0][0:60:360][0:8:575];time[0:1:0];lat[0:60:360];lon[0:8:575];DKDT_SRF[0:1:0][0:60:360][0:8:575]"
+
