@@ -20,7 +20,7 @@ mkdir -p $results_dir
 CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_"`date +%s`".h5"
 
 
-function runit {
+function runit() {
     curl -s -v -o $output_file "$request_url" > $output_file.log 2>&1   
 }
 
