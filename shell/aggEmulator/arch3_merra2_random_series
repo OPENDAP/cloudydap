@@ -18,7 +18,7 @@ export collection_url="http://cloudydap.opendap.org:8080/opendap/arch3/merra2"
 
 mkdir -p $results_dir
 
-CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_"`date +%s`".h5"
+CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"
 
 for test_file in `cat $FILES_LIST`
 do
