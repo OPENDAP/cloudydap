@@ -3,7 +3,7 @@
 
 function run_multivar() {
 
-for i in 17 18 19 20 21
+for i in 18 19 20 21
 do
     echo "";
     echo "Test $i A1"
