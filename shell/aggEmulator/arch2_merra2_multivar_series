@@ -38,11 +38,11 @@ do
     if [ $verbose = 1 ] ; then echo "output_file: $output_file"; fi
     
     time -p { 
-        curl -s -v -o $output_file "$request_url" > $output_file.log 2>&1 
+        curl -s -v -o foo "http://www.opendap.org" > foo.log 2>&1 
+        #curl -s -v -o $output_file "$request_url" > $output_file.log 2>&1 
     }
 
 done 
-
 
 
 
