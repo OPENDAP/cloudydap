@@ -30,7 +30,7 @@ do
     request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP_TAG"
     if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
 
-    output_file=$results_dir/$test_file$file_suffix;
+    output_file=$results_dir/responsefile$file_suffix;
     if [ $verbose = 1 ] ; then echo "output_file: $output_file"; fi
     
     time -p { curl -s -v -o $output_file "$request_url" > $output_file.log 2>&1; }
