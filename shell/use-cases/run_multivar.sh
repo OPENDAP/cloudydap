@@ -20,3 +20,7 @@ do
 done
 
 }
+
+
+run_multivar
+
