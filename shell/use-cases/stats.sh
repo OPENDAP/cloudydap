@@ -6,7 +6,7 @@ mean_stdev()
     echo "$1" |
         awk '
         {
-            print "Value: "$1;
+            print "Value: "$1
             if(NR==0){
                 max=$1;
                 min=$1;
@@ -15,11 +15,11 @@ mean_stdev()
             sumsq+=$1*$1
             if(max<$1){
                 max=$1;
-                print "Changed max to "max;
+                print "Changed max to "max
             }
             if(min>$1){
                 min=$1;
-                print "Changed min to "min;
+                print "Changed min to "min
             }
         }
         END{ 
