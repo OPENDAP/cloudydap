@@ -26,7 +26,7 @@ mean_stdev()
         END{ 
             mean=sum/NR; 
             stdev=sqrt(sumsq/NR - (sum/NR)**2); 
-            printf("n: %d min: %d max: %d mean: %.2f stdev: %.2f",NR,min,max,mean,stdev);
+            printf("n: %d min: %.2f max: %.2f mean: %.2f stdev: %.2f",NR,min,max,mean,stdev);
         }' -
 }
 
