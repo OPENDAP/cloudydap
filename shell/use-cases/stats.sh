@@ -33,6 +33,7 @@ mean_stdev()
 for file in "$@"
 do
     vals=`grep real $file | awk '{print $2}' -`;
-    echo  $file" "$( mean_stdev "$vals" );    
+    mean_stdev "$vals";    
+    #echo  $file" "$( mean_stdev "$vals" );    
 
 done
