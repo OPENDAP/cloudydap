@@ -6,14 +6,18 @@ mean_stdev()
     echo "$1" |
         awk '
         {
-            if(!NR){max=$1;min=$1;}
+            if(NR==0){
+                max=$1;
+                min=$1;
+            }
             sum+=$1; 
             sumsq+=$1*$1
-            if(max<$1)
+            if(max<$1){
                 max=$1;
-            if(min>$1)
+            }
+            if(min>$1){
                 min=$1;
-            
+            }
         }
         END{ 
             mean=sum/NR; 
