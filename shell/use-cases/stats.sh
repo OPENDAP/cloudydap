@@ -7,7 +7,7 @@ mean_stdev()
         awk '
         {
             print "Value: "$1;
-            if(NR==0){
+            if(NR==1){
                 max=$1;
                 min=$1;
                 print "initialized max: "max" min: "min;
