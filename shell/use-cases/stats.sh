@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-mean_stdev()
+basic_stats()
 {
     echo "$1" |
         awk '
@@ -26,7 +26,7 @@ mean_stdev()
         END{ 
             mean=sum/NR; 
             stdev=sqrt(sumsq/NR - (sum/NR)**2); 
-            printf("n: %d min: %.2f max: %.2f mean: %.2f stdev: %.2f",NR,min,max,mean,stdev);
+            printf("n: %d min: %.2f mean: %.2f +/-%.2f max: %.2f",NR,min,mean,stdev,max);
         }' -
 }
 
@@ -34,7 +34,7 @@ mean_stdev()
 for file in "$@"
 do
     vals=`grep real $file | awk '{print $2}' -`;
-    #mean_stdev "$vals";    
-    echo  $file" "$( mean_stdev "$vals" );    
+    #stats "$vals";    
+    echo  $file" "$( basic_stats "$vals" );    
 
 done
