@@ -35,6 +35,6 @@ for file in "$@"
 do
     vals=`grep real $file | awk '{print $2}' -`;
     #stats "$vals";    
-    echo  $file"  "$( basic_stats "$vals" );    
+    echo  $file"  $( basic_stats "$vals" )";    
 
 done
