@@ -26,7 +26,7 @@ basic_stats()
         END{ 
             mean=sum/NR; 
             stdev=sqrt(sumsq/NR - (sum/NR)**2); 
-            printf("n: %d  min: %.2f  mean: %.2f +/-%.2f  max: %.2f",NR,min,mean,stdev,max);
+            printf("n=%d, min=%.2f,  mean=%.2f +/-%.2f,  max=%.2f",NR,min,mean,stdev,max);
         }' -
 }
 
@@ -35,6 +35,6 @@ for file in "$@"
 do
     vals=`grep real $file | awk '{print $2}' -`;
     #stats "$vals";    
-    echo  $file" "$( basic_stats "$vals" );    
+    echo  $file"   "$( basic_stats "$vals" );    
 
 done
