@@ -26,7 +26,7 @@ basic_stats()
         END{ 
             mean=sum/NR; 
             stdev=sqrt(sumsq/NR - (sum/NR)**2); 
-            printf("n=%4d, min=%4.2f,  mean=%6.2f +/-%6.2f,  max=%6.2f",NR,min,mean,stdev,max);
+            printf("n=%.4d, min=%4.2f,  mean=%6.2f +/-%6.2f,  max=%6.2f",NR,min,mean,stdev,max);
         }' -
 }
 
