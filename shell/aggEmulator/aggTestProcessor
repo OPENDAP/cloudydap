@@ -153,6 +153,6 @@ EOF
     if [ $verbose = 1 ] ; then cat $COMMAND_FILE; fi
     
     # besstandalone -c $BES_CONF -i $COMMAND_FILE -f $RESULT_FILE > $LOG_FILE 2>&1
-    time -p { bescmdln -i $COMMAND_FILE -f $RESULT_FILE >> $LOG_FILE 2>&1; }
+    time -p { bescmdln -i $COMMAND_FILE -f $RESULT_FILE >> $LOG_FILE 2>&1 ; }
     
 done
