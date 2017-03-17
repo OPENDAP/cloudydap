@@ -155,6 +155,6 @@ EOF
     # besstandalone -c $BES_CONF -i $COMMAND_FILE -f $RESULT_FILE > $LOG_FILE 2>&1
     # time -p { bescmdln -i $COMMAND_FILE -f $RESULT_FILE >> $LOG_FILE 2>&1; }
     time -p { bescmdln -i "$COMMAND_FILE" -f "$RESULT_FILE" >> "$LOG_FILE" 2>&1 ; }
-    exit
+    #exit
     
 done
