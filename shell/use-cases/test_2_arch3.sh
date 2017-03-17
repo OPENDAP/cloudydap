@@ -7,13 +7,13 @@
 CLOUDYDAP_TAG="UC2_A3CFT_STARTED_"`date +%s`".h5"
 
 echo 'Test AIRS DMR.'
-time curl -s http://cloudydap.opendap.org:8080/opendap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dmr -o airs.dmr
+time -p curl -s http://cloudydap.opendap.org:8080/opendap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dmr -o airs.dmr
 
 echo 'Test AIRS DAP4.'
-time curl -s http://cloudydap.opendap.org:8080/opendap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dap\?dap4.ce=Latitude\;Longitude\;Topography\&cloudydap=$CLOUDYDAP_TAG -o airs_d4_ll.bin
+time -p curl -s http://cloudydap.opendap.org:8080/opendap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dap\?dap4.ce=Latitude\;Longitude\;Topography\&cloudydap=$CLOUDYDAP_TAG -o airs_d4_ll.bin
 
 echo 'Test AIRS DAP4 subsetting.'
-time curl -s -g http://cloudydap.opendap.org:8080/opendap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dap\?dap4.ce=Topography\[0:20:179\]\[0:20:359\]\&cloudydap=$CLOUDYDAP_TAG -o airs_d4_ss.bin
+time -p curl -s -g http://cloudydap.opendap.org:8080/opendap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dap\?dap4.ce=Topography\[0:20:179\]\[0:20:359\]\&cloudydap=$CLOUDYDAP_TAG -o airs_d4_ss.bin
 
 # echo 'Test AIRS DMR (local).'
 # time curl -s http://localhost:8081/opendap/s3/dap/arch3/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dmr -o airs_local.dmr

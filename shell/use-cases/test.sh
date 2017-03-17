@@ -6,14 +6,14 @@
 AUTH_KEY="/Users/ndp/.ssh/RayrayAWS.pem";
 USER=centos
 SYSTEM=cloudydap.opendap.org
-TEST_DIR="/home/centos/hyrax/cloudydap/shell/use-cases";
+TEST_DIR="/home/centos/cloudydap/shell/use-cases";
 REMOTE_TESTS="6 7 10 11 12 13 14 15 16 17 18 19 20 21"
 
 source ./nap_time.sh
 
 function remote_test(){
     test_name=$1;
-    #ssh -i $AUTH_KEY $USER"@"$SYSTEM "$TEST_DIR/$test_name";
+    ssh -i $AUTH_KEY $USER"@"$SYSTEM "$TEST_DIR/$test_name";
 }
    
     
@@ -24,6 +24,7 @@ echo "Running All Architecture 1 Tests."
 
 echo "Testing UC2 Arch #1"
 time -p { ./test_2.sh > logs/test_2_arch1.log 2>&1 ; }
+
 for i in $REMOTE_TESTS
 do
     echo "Testing UC"$i" Arch #1"
