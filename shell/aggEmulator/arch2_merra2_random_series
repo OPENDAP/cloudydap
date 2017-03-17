@@ -20,7 +20,7 @@ mkdir -p $results_dir
 
 CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"
 
-for test_file in `cat $FILES_LIST`
+for test_file in `head -100 $FILES_LIST`
 do
     if [ $verbose = 1 ] ; then echo "----------------------------------------------------------"; fi
     if [ $verbose = 1 ] ; then echo "test_file: $test_file"; fi

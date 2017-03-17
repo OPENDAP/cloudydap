@@ -16,8 +16,6 @@ function remote_test(){
     ssh -i $AUTH_KEY $USER"@"$SYSTEM "$TEST_DIR/$test_name";
 }
    
-    
-
 
 echo "##################################"
 echo "Running All Architecture 1 Tests."
