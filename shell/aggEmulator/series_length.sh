@@ -1,4 +1,4 @@
 #!/bin/bash
 
-export SERIES_LENGTH=100;
+export SERIES_LENGTH=3;
 
