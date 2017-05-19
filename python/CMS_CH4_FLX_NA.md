@@ -323,7 +323,7 @@ fig.savefig(pngfile)
 
 It seems that Lousiana is the winner in CH4 emission from rice. Compare it with the USDA map.
 
-![2010_us_rice_production](https://upload.wikimedia.org/wikipedia/commons/9/9f/2010_US_rice_production.svg)
+![2010_us_rice_production](2010_US_rice_production.png)
 
 # References
 1 https://acdisc.gesdisc.eosdis.nasa.gov/data/CMS/CMS_CH4_FLX_NA.1/doc/README.CMS_CH4_FLX_NA_V1.pdf
