@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<netcdf xmlns="http://www.unidata.ucar.edu/namespaces/netcdf/ncml-2.2">
+  <dimension name="obs" length="71" orgName="FakeDim0" />
+  <attribute name="Conventions" value="CF-1.6" />  
+  <attribute name="featureType" value="trajectory" />
+  <attribute name="cdm_data_type" value="Trajectory" />
+  <variable name="trajectory" type="int">
+    <attribute name="cf_role" value="trajectory_id" />            
+  </variable>
+  <aggregation dimName="trajectory" type="joinNew">
+    <variableAgg name="RetrievalResults_xco2"/>
+    <variableAgg name="RetrievalHeader_sounding_time_tai93"/>
+    <variableAgg name="SoundingGeometry_sounding_longitude"/>
+    <variableAgg name="SoundingGeometry_sounding_latitude"/>
+    <variableAgg name="SoundingGeometry_sounding_altitude"/>    
+    <netcdf location="acos_L2s_160101_01_Production_v201201_L2Sub7309_r01_PolB_161028201935.h5.nc4" coordValue="1"/>
+  </aggregation>
+  <variable name="RetrievalResults_xco2" shape="trajectory obs" type="float">
+    <attribute name="coordinates" value="time lat lon z" />
+    <attribute name="units" value="mole mole-1" />
+  </variable>    
+  <variable name="time" orgName="RetrievalHeader_sounding_time_tai93" shape="trajectory obs" type="float">
+    <attribute name="units" value="seconds since 1993-1-1 0:0:0" />
+    <attribute name="axis" value="T" />    
+  </variable>
+  <variable  name="lon" orgName="SoundingGeometry_sounding_longitude" shape="trajectory obs" type="float">
+    <attribute name="units" value="degrees_east" />
+    <attribute name="axis" value="X" />        
+  </variable>  
+  <variable name="lat" orgName="SoundingGeometry_sounding_latitude" shape="trajectory obs" type="float">
+    <attribute name="units" value="degrees_north" />
+    <attribute name="axis" value="Y" />                
+  </variable>
+  <variable name="z" orgName="SoundingGeometry_sounding_altitude" shape="trajectory obs" type="float">
+    <attribute name="units" value="m" />
+    <attribute name="axis" value="Z" />            
+  </variable>
+</netcdf>
