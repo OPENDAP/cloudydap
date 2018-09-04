@@ -1,11 +1,12 @@
 #!/bin/bash
 source series_length.sh
+source ../use_cases/random_string.sh
 
 verbose=1;
 
 export USE_CASE_ID=$1
-if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
-then 
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ]
+then
     myid=`echo $0 | sed -e "s|./||g"`
     USE_CASE_ID="$myid"
 fi
@@ -25,20 +26,23 @@ for test_file in `head -$SERIES_LENGTH $FILES_LIST`
 do
     if [ $verbose = 1 ] ; then echo "test_file: $test_file"; fi
 
-    # Load Randomly Positioned Area Subset Constraint 
+    # Load Randomly Positioned Area Subset Constraint
     source ./merra2_random_subset_dap4_ce.sh
     DAP4_CE=`echo "$DAP4_CE" | sed -e "s/\\[/\\\\\\[/g" -e "s/\\]/\\\\\\]/g"`
     if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
-    request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP_TAG"
+    UID=$(unique_id)
+    CLOUDYDAP=$UID"_"$CLOUDYDAP_TAG
+
+    request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP"
     if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
 
     output_file=$results_dir/$test_file$file_suffix;
     if [ $verbose = 1 ] ; then echo "output_file: $output_file"; fi
-    
+
     time -p { curl -s -v -o $output_file "$request_url" > $output_file.log 2>&1; }
 
-done 
+done
 
 
 
