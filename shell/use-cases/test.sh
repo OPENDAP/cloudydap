@@ -20,11 +20,11 @@ function remote_test(){
 echo "##################################"
 echo "Running All Architecture 1 Tests. START: "`date`
 echo "Testing UC2 Arch #1"
-time -p { ./test_2.sh > logs/test_2_arch1.log 2>&1 ; }
+time -p { ./test_2.sh 2>&1 | tee logs/test_2_arch1.log ; }
 for i in $REMOTE_TESTS
 do
     echo "Testing UC"$i" Arch #1"
-    time -p { remote_test "test_"$i".sh" > "logs/test_"$i"_arch1.log" 2>&1 ; }
+    time -p { remote_test "test_"$i".sh" 2>&1 | tee "logs/test_"$i"_arch1.log" ; }
 done
 echo "Architecture 1 Tests. COMPLETED: "`date`
 
@@ -33,11 +33,11 @@ sleep_until_5_past;
 echo "##################################"
 echo "Running All Architecture 2 Tests. START: "`date`
 echo "Testing UC2 Arch #2"
-time -p { ./test_2_arch2.sh > logs/test_2_arch2.log 2>&1 ; }
+time -p { ./test_2_arch2.sh 2>&1 | tee logs/test_2_arch2.log ; }
 for i in $REMOTE_TESTS
 do
     echo "Testing UC"$i" Arch #2"
-    time -p { remote_test "test_"$i"_arch2.sh" > "logs/test_"$i"_arch2.log" 2>&1 ; }
+    time -p { remote_test "test_"$i"_arch2.sh" 2>&1 | tee "logs/test_"$i"_arch2.log" ; }
 done
 echo "Architecture 2 Tests. COMPLETED: "`date`
 
@@ -46,12 +46,12 @@ sleep_until_5_past;
 echo "##################################"
 echo "Running All Architecture 3 Tests. START: "`date`
 echo "Testing UC2 Arch #3"
-time -p { ./test_2_arch3.sh > logs/test_2_arch3.log 2>&1 ; }
+time -p { ./test_2_arch3.sh 2>&1 | tee logs/test_2_arch3.log ; }
 
 for i in $REMOTE_TESTS
 do
     echo "Testing UC"$i" Arch #3";
-    time -p { remote_test "test_"$i"_arch3.sh" > "logs/test_"$i"_arch3.log" 2>&1 ; }
+    time -p { remote_test "test_"$i"_arch3.sh" 2>&1  tee "logs/test_"$i"_arch3.log" ; }
 done
 echo "Architecture 3 Tests. COMPLETED: "`date`
 
