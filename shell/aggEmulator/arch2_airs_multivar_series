@@ -19,7 +19,7 @@ export collection_url="http://cloudydap.opendap.org:8080/opendap/arch2/airs"
 
 mkdir -p $results_dir
 
-source ../use_cases/random_string.sh
+source ../use-cases/random_string.sh
 
 CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_"`date +%s`".h5"
 

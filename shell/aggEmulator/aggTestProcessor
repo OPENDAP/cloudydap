@@ -79,7 +79,7 @@ fi
 COLLECTION_FILE_NAMES=`cat $FILES_LIST`
 if [ $verbose = 1 ] ; then echo "Located "`echo $COLLECTION_FILE_NAMES | wc -w `" files."; fi
 
-source ../use_cases/random_string.sh
+source ../use-cases/random_string.sh
 
 for FILE in $COLLECTION_FILE_NAMES
 do

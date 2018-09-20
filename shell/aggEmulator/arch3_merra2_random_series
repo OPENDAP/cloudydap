@@ -1,6 +1,6 @@
 #!/bin/bash
 source series_length.sh
-source ../use_cases/random_string.sh
+source ../use-cases/random_string.sh
 
 verbose=1;
 
