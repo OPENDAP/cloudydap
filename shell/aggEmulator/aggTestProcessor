@@ -85,8 +85,8 @@ for FILE in $COLLECTION_FILE_NAMES
 do
     echo "Accessing $FILE";
 
-    UID=$(unique_id)
-    CLOUDYDAP=$UID"_"$CLOUDYDAP_TAG
+    UNQID=$(unique_id)
+    CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
 
     S3_RESOURCE_URL="$COLLECTION_URL/$FILE"
     if [ "$DATA_SOURCE" = "S3_GATEWAY" ] ; then

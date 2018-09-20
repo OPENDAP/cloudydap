@@ -11,13 +11,13 @@ echo 'Test AIRS DMR.'
 time -p curl -s http://cloudydap.opendap.org:8080/opendap/arch2/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dmr -o airs.dmr
 
 echo 'Test AIRS DAP4.'
-UID=$(unique_id)
-CLOUDYDAP=$UID"_"$CLOUDYDAP_TAG
+UNQID=$(unique_id)
+CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
 time -p curl -s http://cloudydap.opendap.org:8080/opendap/arch2/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dap\?dap4.ce=Latitude\;Longitude\;Topography\&cloudydap=$CLOUDYDAP -o airs_d4_ll.bin
 
 echo 'Test AIRS DAP4 subsetting.'
-UID=$(unique_id)
-CLOUDYDAP=$UID"_"$CLOUDYDAP_TAG
+UNQID=$(unique_id)
+CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
 time -p curl -s -g http://cloudydap.opendap.org:8080/opendap/arch2/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmrpp.dap\?dap4.ce=Topography\[0:20:179\]\[0:20:359\]\&cloudydap=$CLOUDYDAP -o airs_d4_ss.bin
 
 # echo 'Test AIRS DMR (local).'

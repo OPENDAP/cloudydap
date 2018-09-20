@@ -26,8 +26,8 @@ export ARCH_ID="A2CFT"
 if [ $verbose = 1 ] ; then echo "ARCH_ID: $ARCH_ID"; fi
 
 source ../use-cases/random_string.sh
-UID=$(unique_id)
-export CLOUDYDAP_TAG=$UID"_"$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"
+UNQID=$(unique_id)
+export CLOUDYDAP_TAG=$UNQID"_"$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"
 
 export DAP_REQUEST=dap
 export COLLECTION="arch2/merra2"

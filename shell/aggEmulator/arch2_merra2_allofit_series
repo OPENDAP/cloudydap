@@ -29,8 +29,8 @@ do
     DAP4_CE="" # Nothing Means Everything
     if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
-    UID=$(unique_id)
-    CLOUDYDAP=$UID"_"$CLOUDYDAP_TAG
+    UNQID=$(unique_id)
+    CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
 
     request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP"
     if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
