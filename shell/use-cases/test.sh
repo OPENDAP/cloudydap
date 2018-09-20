@@ -43,17 +43,17 @@ echo "Architecture 2 Tests. COMPLETED: "`date`
 
 sleep_until_5_past;
 
-echo "##################################"
-echo "Running All Architecture 3 Tests. START: "`date`
-echo "Testing UC2 Arch #3"
-time -p { ./test_2_arch3.sh 2>&1 | tee logs/test_2_arch3.log ; }
+# echo "##################################"
+# echo "Running All Architecture 3 Tests. START: "`date`
+# echo "Testing UC2 Arch #3"
+# time -p { ./test_2_arch3.sh 2>&1 | tee logs/test_2_arch3.log ; }
 
-for i in $REMOTE_TESTS
-do
-    echo "Testing UC"$i" Arch #3";
-    time -p { remote_test "test_"$i"_arch3.sh" 2>&1  tee "logs/test_"$i"_arch3.log" ; }
-done
-echo "Architecture 3 Tests. COMPLETED: "`date`
+# for i in $REMOTE_TESTS
+# do
+#     echo "Testing UC"$i" Arch #3";
+#     time -p { remote_test "test_"$i"_arch3.sh" 2>&1  tee "logs/test_"$i"_arch3.log" ; }
+# done
+# echo "Architecture 3 Tests. COMPLETED: "`date`
 
 
 
