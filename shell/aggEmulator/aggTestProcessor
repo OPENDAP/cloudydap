@@ -139,7 +139,7 @@ cmdDoc=`cat <<EOF
   <bes:setContext name="xdap_accept">2.0</bes:setContext>
   <bes:setContext name="dap_explicit_containers">no</bes:setContext>
   <bes:setContext name="errors">xml</bes:setContext>
-  <bes:setContext name="cloudydap">$CLOUDYDAP_TAG</bes:setContext>
+  <bes:setContext name="cloudydap">$CLOUDYDAP</bes:setContext>
   <bes:setContext name="max_response_size">0</bes:setContext>
   <bes:setContainer name="myContainer" space="$SPACE">$S3_RESOURCE_URL</bes:setContainer>
   <bes:define name="d1" space="default">
