@@ -163,7 +163,7 @@ EOF
     echo "COMMAND_FILE = $COMMAND_FILE"
     echo "RESULT_FILE = $RESULT_FILE"
     echo "LOG_FILE = $LOG_FILE"
-    time -p { bescmdln -i "$COMMAND_FILE" -f "$RESULT_FILE" >> "$LOG_FILE" 2>&1 ; }
+    # time -p { bescmdln -i "$COMMAND_FILE" -f "$RESULT_FILE" >> "$LOG_FILE" 2>&1 ; }
     #exit
 
 done
