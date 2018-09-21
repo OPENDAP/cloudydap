@@ -4,7 +4,7 @@
 #
 # https://github.com/OPENDAP/cloudydap/wiki/Trade-Study-Use-Case-2---DAP4-with-CF
 #
-random_string=${BASH_SOURCE[0]}/random_string.sh
+random_string=$(dirname ${BASH_SOURCE[0]})/random_string.sh
 echo "random_string.sh = $random_string"
 source $random_string
 
