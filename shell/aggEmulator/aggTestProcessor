@@ -1,5 +1,14 @@
 #!/bin/bash
 
+function getit() {
+   cmd="${1}"
+   result="${2}"
+   log="${3}"
+   bescmdln -i "${cmd}" -f "${result}" >> "${log}" 2>&1
+}
+
+echo "in aggTestProcessor"
+
 if [ -z ${verbose+"true"} ]
 then
     verbose=0
@@ -159,11 +168,13 @@ EOF
 
     # besstandalone -c $BES_CONF -i $COMMAND_FILE -f $RESULT_FILE > $LOG_FILE 2>&1
     # time -p { bescmdln -i $COMMAND_FILE -f $RESULT_FILE >> $LOG_FILE 2>&1; }
-    echo "in aggTestProcessor"
     echo "COMMAND_FILE = $COMMAND_FILE"
     echo "RESULT_FILE = $RESULT_FILE"
     echo "LOG_FILE = $LOG_FILE"
+    time -p  get_it "${COMMAND_FILE}" "${RESULT_FILE}" "{$LOG_FILE}"
     # time -p { bescmdln -i "$COMMAND_FILE" -f "$RESULT_FILE" >> "$LOG_FILE" 2>&1 ; }
     #exit
 
 done
+
+echo "end of aggTestProcessor"
