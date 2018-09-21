@@ -16,7 +16,7 @@ export ARCH_ID="A1CFT"
 export FILES_LIST="merra2_AggFiles"
 export results_dir=$USE_CASE_ID"_"$ARCH_ID
 export file_suffix=".dap"
-export collection_url="http://cloudydap.opendap.org:8080/s3/dap/cloudydap/merra2"
+export collection_url="http://$HYRAX:8080/s3/dap/cloudydap/merra2"
 mkdir -p $results_dir
 
 CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"

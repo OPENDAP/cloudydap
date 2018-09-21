@@ -16,7 +16,7 @@ export ARCH_ID="A2CFT"
 export FILES_LIST="merra2_AggFiles"
 export results_dir=$USE_CASE_ID"_"$ARCH_ID
 export file_suffix=".dmrpp.dap"
-export collection_url="http://cloudydap.opendap.org:8080/opendap/arch2/merra2"
+export collection_url="http://$HYRAX:8080/opendap/arch2/merra2"
 
 mkdir -p $results_dir
 

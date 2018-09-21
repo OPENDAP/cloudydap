@@ -9,17 +9,17 @@ source ./random_string.sh
 CLOUDYDAP_TAG="UC2_A1CFT_STARTED_"`date +%s`".h5"
 
 echo 'Test AIRS DMR.'
-time -p curl -s http://cloudydap.opendap.org:8080/s3/dap/cloudydap/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmr -o airs.dmr
+time -p curl -s http://$HYRAX:8080/s3/dap/cloudydap/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmr -o airs.dmr
 
 echo 'Test AIRS DAP4.'
 UNQID=$(unique_id)
 CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
-time -p curl -s http://cloudydap.opendap.org:8080/s3/dap/cloudydap/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dap\?dap4.ce=Latitude\;Longitude\;Topography\&cloudydap=$CLOUDYDAP -o airs_d4_ll.bin
+time -p curl -s http://$HYRAX:8080/s3/dap/cloudydap/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dap\?dap4.ce=Latitude\;Longitude\;Topography\&cloudydap=$CLOUDYDAP -o airs_d4_ll.bin
 
 echo 'Test AIRS DAP4 subsetting.'
 UNQID=$(unique_id)
 CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
-time -p curl -s -g http://cloudydap.opendap.org:8080/s3/dap/cloudydap/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dap\?dap4.ce=Topography\[0:20:179\]\[0:20:359\]\&cloudydap=$CLOUDYDAP -o airs_d4_ss.bin
+time -p curl -s -g http://$HYRAX:8080/s3/dap/cloudydap/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dap\?dap4.ce=Topography\[0:20:179\]\[0:20:359\]\&cloudydap=$CLOUDYDAP -o airs_d4_ss.bin
 
 # echo 'Test AIRS DMR (local).'
 # time curl -s http://localhost:8081/opendap/s3/dap/cloudydap/airs/AIRS.2015.01.01.L3.RetStd_IR001.v6.0.11.0.G15013155825.nc.h5.dmr -o airs_local.dmr
