@@ -8,13 +8,14 @@ USER=centos
 SYSTEM=52.91.18.246
 HYRAX=$SYSTEM
 TEST_DIR="/home/centos/cloudydap/shell/use-cases"
+SPATH_DIR="/home/centos/hyrax"
 REMOTE_TESTS="6 7 10 11 12 13 14 15 16 17 18 19 20 21"
 
 source ./nap_time.sh
 
 function remote_test(){
     test_name=$1;
-    ssh -i $AUTH_KEY $USER"@"$SYSTEM "env HYRAX=$HYRAX $TEST_DIR/$test_name";
+    ssh -i $AUTH_KEY $USER"@"$SYSTEM "export HYRAX=$HYRAX; cd $SPATH_DIR && source spath.sh && cd - && $TEST_DIR/$test_name";
 }
 
 
