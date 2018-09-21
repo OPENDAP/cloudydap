@@ -42,7 +42,7 @@ do
 done
 echo "Architecture 2 Tests. COMPLETED: "`date`
 
-sleep_until_5_past;
+# sleep_until_5_past;
 
 # echo "##################################"
 # echo "Running All Architecture 3 Tests. START: "`date`
