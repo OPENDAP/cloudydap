@@ -4,7 +4,9 @@
 #
 # https://github.com/OPENDAP/cloudydap/wiki/Trade-Study-Use-Case-2---DAP4-with-CF
 #
-source ${BASH_SOURCE[0]}/random_string.sh
+random_string=${BASH_SOURCE[0]}/random_string.sh
+echo "random_string.sh = $random_string"
+source $random_string
 
 CLOUDYDAP_TAG="UC2_A2CFT_STARTED_"`date +%s`".h5"
 echo 'Test AIRS DMR.'

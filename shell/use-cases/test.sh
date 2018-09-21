@@ -35,7 +35,7 @@ function remote_test(){
 echo "##################################"
 echo "Running All Architecture 2 Tests. START: "`date`
 echo "Testing UC2 Arch #2"
-time -p { remote_test "./test_2_arch2.sh" 2>&1 | tee logs/test_2_arch2.log ; }
+time -p { remote_test "test_2_arch2.sh" 2>&1 | tee logs/test_2_arch2.log ; }
 for i in $REMOTE_TESTS
 do
     echo "Testing UC"$i" Arch #2"
