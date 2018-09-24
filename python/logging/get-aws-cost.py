@@ -1,21 +1,17 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Download AWS Cost and Usage Reports from S3.
 """
 import sys
 import os
 import argparse
+import logging
 import datetime
 from pathlib import Path, PurePosixPath
 from urllib.parse import urlparse
 import json
 import boto3
 import botocore.config
-
-
-def log(*msg):
-    if arg.verbose:
-        print(*msg)
 
 
 def current_dt():
@@ -47,12 +43,20 @@ parser.add_argument('--aws_secret',
                     default=os.environ.get('AWS_SECRET_ACCESS_KEY'),
                     help='Amazon identification key secret. Default: from '
                     '$AWS_SECRET_ACCESS_KEY env. variable.',)
-parser.add_argument('-v', '--verbose', help='Verbose output',
-                    action='store_true', default=False)
 parser.add_argument(
     '-d', '--delete', action='store_true', default=False,
     help='Delete all the older reports for the billing period')
+parser.add_argument('--loglevel', default='info',
+                    choices=['debug', 'info', 'warning'],
+                    help='Logging level')
 arg = parser.parse_args()
+
+logging.basicConfig(
+    format='%(asctime)s:%(levelname)s:%(filename)s:%(lineno)d:%(message)s',
+    level=arg.loglevel.upper(),
+    datefmt='%H:%M:%S',
+    stream=sys.stderr)
+lggr = logging.getLogger(__name__)
 
 # Parse and fix up bucket and logs key prefix...
 s3loc = urlparse(arg.s3loc)
@@ -63,7 +67,7 @@ if s3prefix[0] == '/':
 if s3prefix[-1] != '/':
     s3prefix += '/'
 s3prefix = PurePosixPath(s3prefix)
-log('S3 bucket = {}; S3 base key prefix = {}'.format(s3bucket, s3prefix))
+lggr.info('S3 bucket = {}; S3 base key prefix = {}'.format(s3bucket, s3prefix))
 
 # Compute the dates for the first day of the billing's month and its next
 # month...
@@ -74,19 +78,18 @@ bill_ep = (bill_sp + datetime.timedelta(days=32)).replace(day=1)
 # not exist...
 log_dir = Path(arg.to)
 if not log_dir.exists():
-    log('Creating directory for report file {}'.format(log_dir))
+    lggr.info('Creating directory for report file {}'.format(log_dir))
     log_dir.mkdir(mode=0o774, parents=True)
-log('Download S3 logs to directory: {}'.format(log_dir.resolve()))
+lggr.info('Download billing reports to directory: {}'.format(log_dir.resolve()))
 
 # Connect to AWS and the S3 bucket...
-log('Connecting to AWS')
-s3 = boto3.resource(
-    's3', aws_access_key_id=arg.aws_key,
-    aws_secret_access_key=arg.aws_secret,
-    config=botocore.config.Config(
-        user_agent_extra=PurePosixPath(sys.argv[0]).name
-    )
-)
+lggr.info('Connecting to AWS')
+s3 = boto3.resource('s3', 'us-east-1',
+                    aws_access_key_id=arg.aws_key,
+                    aws_secret_access_key=arg.aws_secret,
+                    config=botocore.config.Config(
+                        user_agent_extra=PurePosixPath(sys.argv[0]).name
+                    ))
 
 # Bucket key for billing report JSON locator file...
 report_name = s3prefix.stem
@@ -94,7 +97,7 @@ bill_prd = bill_sp.strftime('%Y%m%d') + '-' + bill_ep.strftime('%Y%m%d')
 manifest = s3prefix.joinpath(bill_prd, '{}-Manifest.json'.format(report_name))
 
 # Get the key for the billing report from the JSON locator...
-log('Getting billing manifest {}'.format(manifest))
+lggr.info('Getting billing manifest {}'.format(manifest))
 obj = s3.Object(s3bucket, str(manifest))
 info = json.loads(obj.get()['Body'].read().decode('utf-8'))
 
@@ -111,16 +114,17 @@ if (info['billingPeriod']['start'] != bill_start_period or
 
 # Download billing reports...
 if not info['reportKeys']:
-    print('No report to download', file=sys.stderr)
+    print('No report to download')
 else:
     for rk in info['reportKeys']:
         dest = Path(arg.to).joinpath(
             PurePosixPath(rk).name.replace(report_name,
                                            report_name + '-' + bill_prd))
-        log('Downloading report {} to {}'.format(rk, dest))
+        lggr.info('Downloading report {} to {}'.format(rk, dest))
         s3.Object(s3bucket, rk).download_file(str(dest))
 
     if arg.delete:
+        lggr.info('Deleting older billing reports...')
         # Remove all the older billing reports...
         if 'assemblyId' in info:
             flt_prfx = str(manifest.parent)
@@ -129,7 +133,7 @@ else:
             for id in b.objects.filter(Prefix=flt_prfx):
                 if (info['assemblyId'] not in PurePosixPath(id.key).parts and
                         id.key != manifest_key):
-                    log('Deleting object {}'.format(id.key))
+                    lggr.info('Deleting object {}'.format(id.key))
                     id.delete()
         else:
-            print('Assembly ID missing in the manifest', file=sys.stderr)
+            lggr.warning('Assembly ID missing in the manifest')

@@ -49,6 +49,10 @@ Analyzes the usage and cost data for different architectures prepared by the abo
 
 Analyzes Detailed Hourly AWS Cost and Usage Report with Resource IDs and Tags. These reports are downloaded using the get-aws-cost.py command-line program developed for this project.
 
+### [`s3log-preproc.ipynb`](http://nbviewer.jupyter.org/github/OPENDAP/cloudydap/blob/master/python/logging/s3log-preproc.ipynb)
+
+Downloaded S3 access log files are turned into CSV files. This notebook contains code snippets that allow cleaning/filtering of the access log records.
+
 ### [`s3log-analysis.ipynb`](http://nbviewer.jupyter.org/github/OPENDAP/cloudydap/blob/master/python/logging/s3log-analysis.ipynb)
 
 Comprehensive analysis of S3 request (with a lot of graphs) performance from S3 access logs.

@@ -1,21 +1,17 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Download and parse S3 access logs from a specified S3 bucket.
 """
 import os
 import sys
 import argparse
+import logging
 from pathlib import Path, PurePosixPath
 from datetime import datetime
 from urllib.parse import urlparse
 import csv
 import boto3
 import botocore.config
-
-
-def log(*msg):
-    if arg.verbose:
-        print(*msg)
 
 
 def process_log(logf):
@@ -67,11 +63,19 @@ parser.add_argument('--aws_secret',
                     default=os.environ.get('AWS_SECRET_ACCESS_KEY'),
                     help='Amazon identification key secret. Default: from '
                     '$AWS_SECRET_ACCESS_KEY env. variable.')
-parser.add_argument('-v', '--verbose', help='Verbose output',
-                    action='store_true', default=False)
 parser.add_argument('-d', '--delete', action='store_true',
                     help='Delete S3 logs after download')
+parser.add_argument('--loglevel', default='info',
+                    choices=['debug', 'info', 'warning'],
+                    help='Logging level')
 arg = parser.parse_args()
+
+logging.basicConfig(
+    format='%(asctime)s:%(levelname)s:%(filename)s:%(lineno)d:%(message)s',
+    level=arg.loglevel.upper(),
+    datefmt='%H:%M:%S',
+    stream=sys.stderr)
+lggr = logging.getLogger(__name__)
 
 # Parse and fix up bucket and logs key prefix...
 s3loc = urlparse(arg.s3loc)
@@ -82,16 +86,16 @@ if s3prefix[0] == '/':
 if s3prefix[-1] != '/':
     s3prefix += '/'
 
-log('S3 log location: bucket = {}, key prefix = {}'.format(s3bucket,
-                                                           s3prefix))
+lggr.info(
+    'S3 log location: bucket = {}, key prefix = {}'.format(s3bucket, s3prefix))
 
 # Directory where S3 logs should be downloaded to. Make one if it does not
 # exist...
 log_dir = Path(arg.to)
 if not log_dir.exists():
-    log('Creating directory for log files {}'.format(log_dir))
+    lggr.info('Creating directory for log files {}'.format(log_dir))
     log_dir.mkdir(mode=0o774, parents=True)
-log('Download S3 logs to directory: {}'.format(log_dir.resolve()))
+lggr.info('Download S3 logs to directory: {}'.format(log_dir.resolve()))
 
 # The CSV files to store parsed S3 log data...
 csvfile = Path(arg.csvfile)
@@ -104,17 +108,18 @@ if not csvfile.exists():
                'Referrer', 'User_Agent', 'Version_Id']
     with csvfile.open('w', newline='') as f:
         csv.writer(f).writerow(columns)
-log('Store parsed log information in this CSV file: {}'
-    .format(csvfile.resolve()))
+lggr.info('Store parsed log information in this CSV file: {}'
+          .format(csvfile.resolve()))
 
 # Connect to AWS and the S3 bucket...
-log('Connecting to AWS')
-s3 = boto3.resource(
-    's3', aws_access_key_id=arg.aws_key, aws_secret_access_key=arg.aws_secret,
-    config=botocore.config.Config(
-        user_agent_extra=PurePosixPath(sys.argv[0]).name
-    )
-)
+lggr.info('Connecting to AWS')
+s3 = boto3.resource('s3', 'us-east-1',
+                    aws_access_key_id=arg.aws_key,
+                    aws_secret_access_key=arg.aws_secret,
+                    config=botocore.config.Config(
+                        user_agent_extra=PurePosixPath(sys.argv[0]).name
+                    ))
+lggr.info('Connected to AWS: %r' % s3)
 bckt = s3.Bucket(s3bucket)
 
 # New S3 logs to parse...
@@ -122,16 +127,17 @@ new_logs = 0
 failed_logs = list()
 
 # Loop over all S3 logs...
+lggr.info('Processing available S3 logs...')
 for s3logf in bckt.objects.filter(Prefix=s3prefix):
     try:
         # Local name of the S3 log file...
         local_logf = log_dir.joinpath(PurePosixPath(s3logf.key).name)
 
         if local_logf.exists() and local_logf.stat().st_size == s3logf.size:
-            log('{} exists. Skipping download.'.format(local_logf))
+            lggr.info('{} exists. Skipping download.'.format(local_logf))
         else:
             # Download the S3 log file...
-            log('Downloading {} to {}'.format(s3logf.key, local_logf))
+            lggr.info('Downloading {} to {}'.format(s3logf.key, local_logf))
             bckt.download_file(s3logf.key, str(local_logf))
             new_logs += 1
 
@@ -146,19 +152,22 @@ for s3logf in bckt.objects.filter(Prefix=s3prefix):
 
         if arg.delete:
             try:
-                log('Deleting S3 object {}'.format(s3logf.key))
+                lggr.info('Deleting S3 object {}'.format(s3logf.key))
                 bckt.Object(s3logf.key).delete()
             except Exception as e:
-                log('Failed to delete S3 object: {}'.format(str(e)))
+                lggr.exception('Failed to delete S3 object:')
                 failed_logs.append((s3logf.key, str(e)))
 
     except Exception as e:
+        lggr.exception('There was an exception:')
         failed_logs.append((s3logf.key, str(e)))
 
 
-log('Finished downloading {} new S3 log files'.format(new_logs))
+lggr.info('Finished downloading {} new S3 log files'.format(new_logs))
 if len(failed_logs):
-    log('Processing of {} S3 logs failed'.format(len(failed_logs)))
+    lggr.info('Processing of {} S3 logs failed'.format(len(failed_logs)))
+    print('Failed S3 logs:')
     for l in failed_logs:
         print('Key {} Error: {}'.format(l[0], l[1]))
-log('Done!')
+lggr.info('Done!')
+logging.shutdown()
