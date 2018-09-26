@@ -1,11 +1,12 @@
 #!/bin/bash
 source series_length.sh
+source ../use-cases/random_string.sh
 
 verbose=1;
 
 export USE_CASE_ID=$1
-if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
-then 
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ]
+then
     myid=`echo $0 | sed -e "s|./||g"`
     USE_CASE_ID="$myid"
 fi
@@ -15,7 +16,7 @@ export ARCH_ID="A2CFT"
 export FILES_LIST="airs_AggFiles"
 export results_dir=$USE_CASE_ID"_"$ARCH_ID
 export file_suffix=".dmrpp.dap"
-export collection_url="http://cloudydap.opendap.org:8080/opendap/arch2/airs"
+export collection_url="http://$HYRAX:8080/opendap/arch2/airs"
 
 mkdir -p $results_dir
 
@@ -25,20 +26,23 @@ for test_file in `head -$SERIES_LENGTH $FILES_LIST`
 do
     if [ $verbose = 1 ] ; then echo "test_file: $test_file"; fi
 
-    # Load Randomly Positioned Area Subset Constraint 
+    # Load Randomly Positioned Area Subset Constraint
     source ./airs_random_subset_dap4_ce.sh
     DAP4_CE=`echo "$DAP4_CE" | sed -e "s/\\[/\\\\\\[/g" -e "s/\\]/\\\\\\]/g"`
     if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
-    request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP_TAG"
+    UNQID=$(unique_id)
+    CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
+
+    request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP"
     if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
 
     output_file=$results_dir/$test_file$file_suffix;
     if [ $verbose = 1 ] ; then echo "output_file: $output_file"; fi
-    
+
     time -p { curl -s -v -o $output_file "$request_url" > $output_file.log 2>&1; }
 
-done 
+done
 
 
 

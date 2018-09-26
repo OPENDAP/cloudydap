@@ -1,12 +1,13 @@
 #!/bin/bash
 source series_length.sh
+source ../use-cases/random_string.sh
 
 verbose=1;
 
 
 export USE_CASE_ID=$1
-if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
-then 
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ]
+then
     myid=`echo $0 | sed -e "s|./||g"`
     USE_CASE_ID="$myid"
 fi
@@ -16,7 +17,7 @@ export ARCH_ID="A3CFT"
 export FILES_LIST="merra2_AggFiles"
 export results_dir=$USE_CASE_ID"_"$ARCH_ID
 export file_suffix=".dmrpp.dap"
-export collection_url="http://cloudydap.opendap.org:8080/opendap/arch3/merra2"
+export collection_url="http://$HYRAX:8080/opendap/arch3/merra2"
 
 mkdir -p $results_dir
 
@@ -30,15 +31,18 @@ do
     DAP4_CE="" # Nothing Means Everything
     if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
-    request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP_TAG"
+    UNQID=$(unique_id)
+    CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
+
+    request_url="$collection_url/$test_file$file_suffix?dap4.ce=$DAP4_CE&cloudydap=$CLOUDYDAP"
     if [ $verbose = 1 ] ; then echo "request_url: $request_url"; fi
 
     output_file=$results_dir/responsefile$file_suffix;
     if [ $verbose = 1 ] ; then echo "output_file: $output_file"; fi
-    
+
     time -p { curl -s -v -o $output_file "$request_url" > $output_file.log 2>&1; }
 
-done 
+done
 
 
 

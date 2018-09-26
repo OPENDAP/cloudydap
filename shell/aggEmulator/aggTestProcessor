@@ -1,45 +1,46 @@
 #!/bin/bash
+echo "in aggTestProcessor"
 
 if [ -z ${verbose+"true"} ]
-then 
+then
     verbose=0
 fi
 if [ $verbose = 1 ] ; then echo "verbose: $verbose"; fi
 
-if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
-then 
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ]
+then
     export USE_CASE_ID="UNKNOWN_USE_CASE"
 fi
 if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
 
 
 if [ -z ${CLOUDYDAP_TAG+"true"} ]
-then 
+then
     CLOUDYDAP_TAG="RUN_STARTED_"`date +%s`
 fi
 if [ $verbose = 1 ] ; then echo "CLOUDYDAP_TAG: $CLOUDYDAP_TAG"; fi
 
 
 if [ -z ${COLLECTION+"true"} ]
-then 
+then
     COLLECTION="merra2"
 fi
 if [ $verbose = 1 ] ; then echo "COLLECTION: $COLLECTION"; fi
 
 if [ -z ${DAP4_CE+"true"} ]
-then 
+then
     DAP4_CE="PS"
 fi
 if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
 if [ -z ${DAP_REQUEST+"true"} ]
-then 
+then
     DAP_REQUEST="dmr"
 fi
 if [ $verbose = 1 ] ; then echo "DAP_REQUEST: $DAP_REQUEST"; fi
 
 if [ -z ${FILES_LIST+"true"} ]
-then 
+then
     FILES_LIST="AggFiles"
 fi
 if [ $verbose = 1 ] ; then echo "FILES_LIST: $FILES_LIST"; fi
@@ -51,13 +52,13 @@ if [ $verbose = 1 ] ; then echo "BES_CONF: $BES_CONF"; fi
 if [ $verbose = 1 ] ; then echo "DATA_SOURCE: $DATA_SOURCE"; fi
 
 if [ "$DATA_SOURCE" = "S3_GATEWAY" ] ; then
-    
+
     SPACE=gateway
     if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi
-    
+
     BUCKET_URL="https://s3.amazonaws.com/cloudydap"
     if [ $verbose = 1 ] ; then echo "BUCKET_URL: $BUCKET_URL"; fi
-    
+
     COLLECTION_URL="$BUCKET_URL/$COLLECTION"
     if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
 
@@ -65,40 +66,45 @@ elif [ "$DATA_SOURCE" = "DMRPP" ] ; then
 
     SPACE=catalog
     if [ $verbose = 1 ] ; then echo "SPACE: $SPACE"; fi
-        
+
     COLLECTION_URL="/$COLLECTION";
     if [ $verbose = 1 ] ; then echo "COLLECTION_URL: $COLLECTION_URL"; fi
-    
-else 
+
+else
     echo "ERROR: Production target must be either 'S3_GATEWAY' or 'DMRPP'";
     exit 2;
 fi
 
-  
+
 
 COLLECTION_FILE_NAMES=`cat $FILES_LIST`
 if [ $verbose = 1 ] ; then echo "Located "`echo $COLLECTION_FILE_NAMES | wc -w `" files."; fi
 
+source ../use-cases/random_string.sh
+
 for FILE in $COLLECTION_FILE_NAMES
 do
     echo "Accessing $FILE";
-    
+
+    UNQID=$(unique_id)
+    CLOUDYDAP=$UNQID"_"$CLOUDYDAP_TAG
+
     S3_RESOURCE_URL="$COLLECTION_URL/$FILE"
     if [ "$DATA_SOURCE" = "S3_GATEWAY" ] ; then
-        S3_RESOURCE_URL=$S3_RESOURCE_URL"?cloudydap=$CLOUDYDAP_TAG"
+        S3_RESOURCE_URL=$S3_RESOURCE_URL"?cloudydap=$CLOUDYDAP"
     fi
-    
+
     if [ "$DATA_SOURCE" = "DMRPP" ] ; then
         S3_RESOURCE_URL=$S3_RESOURCE_URL".dmrpp"
     fi
-    
+
     if [ $verbose = 1 ] ; then echo "S3_RESOURCE_URL: $S3_RESOURCE_URL"; fi
 
     if [ -z ${STORE_RESULT+"true"} ]
-    then 
+    then
         RESULT_FILE="/dev/null"
         LOG_FILE=$RESULT_FILE
-    else 
+    else
         mkdir -p $USE_CASE_ID"_"$ARCH_ID
         RESULT_FILE=$USE_CASE_ID"_"$ARCH_ID/$FILE.$DAP_REQUEST
         LOG_FILE=$RESULT_FILE.log
@@ -107,18 +113,18 @@ do
 
 
     # ./getDAP -c $BES_CONF -s $SPACE -d $DAP_REQUEST -t "$DAP2_CE" -i $S3_RESOURCE_URL > $COLLECTION/$FILE.$DAP_REQUEST
-    
+
     if [ -z ${DAP4_CE+"true"} ]
-    then 
+    then
         if [ $verbose = 1 ] ; then  echo "DAP4_CE: Is Not Set"; fi
-CONTAINER_ELEMENT=`cat <<EOF 
+CONTAINER_ELEMENT=`cat <<EOF
     <bes:container name="myContainer" />
 EOF
 `
-    else 
+    else
         if [ $verbose = 1 ] ; then echo "DAP4_CE: $DAP4_CE"; fi
 
-CONTAINER_ELEMENT=`cat <<EOF 
+CONTAINER_ELEMENT=`cat <<EOF
     <bes:container name="myContainer">
         <bes:dap4constraint>$DAP4_CE</bes:dap4constraint>
     </bes:container>
@@ -127,14 +133,14 @@ EOF
     fi
 
 
-cmdDoc=`cat <<EOF 
+cmdDoc=`cat <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <bes:request xmlns:bes="http://xml.opendap.org/ns/bes/1.0#" reqID="[http-bio-8080-exec-1:20:gateway_request]">
   <bes:setContext name="bes_timeout">300</bes:setContext>
   <bes:setContext name="xdap_accept">2.0</bes:setContext>
   <bes:setContext name="dap_explicit_containers">no</bes:setContext>
   <bes:setContext name="errors">xml</bes:setContext>
-  <bes:setContext name="cloudydap">$CLOUDYDAP_TAG</bes:setContext>
+  <bes:setContext name="cloudydap">$CLOUDYDAP</bes:setContext>
   <bes:setContext name="max_response_size">0</bes:setContext>
   <bes:setContainer name="myContainer" space="$SPACE">$S3_RESOURCE_URL</bes:setContainer>
   <bes:define name="d1" space="default">
@@ -148,13 +154,16 @@ EOF
 
     COMMAND_FILE=$(mktemp -t getDAP_XXXXXX)
     if [ $verbose = 1 ] ; then echo "COMMAND_FILE: " $COMMAND_FILE;  fi
-    
+
     echo $cmdDoc | tee $LOG_FILE > $COMMAND_FILE
     if [ $verbose = 1 ] ; then cat $COMMAND_FILE; fi
-    
+
     # besstandalone -c $BES_CONF -i $COMMAND_FILE -f $RESULT_FILE > $LOG_FILE 2>&1
     # time -p { bescmdln -i $COMMAND_FILE -f $RESULT_FILE >> $LOG_FILE 2>&1; }
-    time -p { bescmdln -i "$COMMAND_FILE" -f "$RESULT_FILE" >> "$LOG_FILE" 2>&1 ; }
+    echo "bescmdln -i \"${COMMAND_FILE}\" -f \"${RESULT_FILE}\" >> \"${LOG_FILE}\""
+    bescmdln -i "${COMMAND_FILE}" -f "${RESULT_FILE}" >> "${LOG_FILE}" 2>&1
     #exit
-    
+
 done
+
+echo "end of aggTestProcessor"

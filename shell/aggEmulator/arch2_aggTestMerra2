@@ -3,16 +3,16 @@
 verbose=1;
 
 export USE_CASE_ID=$1
-if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ] 
-then 
+if [[ -z "${USE_CASE_ID// }" ]] || [ ! -n $USE_CASE_ID ]
+then
     myid=`echo $0 | sed -e "s|./||g"`
     USE_CASE_ID="$myid"
 fi
 if [ $verbose = 1 ] ; then echo "USE_CASE_ID: $USE_CASE_ID"; fi
 
 export DAP4_CE=$2
-if [[ -z "${DAP4_CE// }" ]] || [ ! -n $DAP4_CE ] 
-then 
+if [[ -z "${DAP4_CE// }" ]] || [ ! -n $DAP4_CE ]
+then
     # By default get a single value
     export DAP4_CE="PRECCU[0:1:0][180:1:180][288:1:288]"
 fi
@@ -25,7 +25,9 @@ if [ $verbose = 1 ] ; then echo "DATA_SOURCE: $DATA_SOURCE"; fi
 export ARCH_ID="A2CFT"
 if [ $verbose = 1 ] ; then echo "ARCH_ID: $ARCH_ID"; fi
 
-export CLOUDYDAP_TAG=$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"
+source ../use-cases/random_string.sh
+UNQID=$(unique_id)
+export CLOUDYDAP_TAG=$UNQID"_"$USE_CASE_ID"_"$ARCH_ID"_STARTED_"`date +%s`".h5"
 
 export DAP_REQUEST=dap
 export COLLECTION="arch2/merra2"
