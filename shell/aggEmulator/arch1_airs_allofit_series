@@ -14,7 +14,7 @@ export ARCH_ID="A1CFT"
 export FILES_LIST="airs_AggFiles"
 export results_dir=$USE_CASE_ID"_"$ARCH_ID
 export file_suffix=".dap"
-export collection_url="http://cloudydap.opendap.org:8080/s3/dap/cloudydap/airs"
+export collection_url="http://curlmulti.opendap.org:8080/s3/dap/cloudydap/airs"
 
 mkdir -p $results_dir
 
