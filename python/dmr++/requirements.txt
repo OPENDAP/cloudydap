@@ -1,2 +1,2 @@
 git+https://github.com/ajelenak-thg/h5py.git@storage-info
-lxml==3.6.4
+lxml==3.6.5
